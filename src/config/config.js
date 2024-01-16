@@ -24,4 +24,14 @@ config.url = {
   baseUrl: process.env.BASE_URL,
 };
 
+config.db = {
+  cs: process.env.MONGO_URI,
+  dbName: process.env.DB_NAME,
+};
+
+config.session = {
+  secret: process.env.SESSION_SECRET,
+};
+
+// console.log(config);
 export default config;
