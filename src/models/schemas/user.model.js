@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: true,
+    required: false,
   },
   email: {
     type: String,
@@ -39,23 +39,23 @@ const userSchema = new mongoose.Schema({
   },
   adress: {
     type: String,
-    required: true,
+    required: false,
   },
   location: {
     type: String,
-    required: true,
+    required: false,
   },
   province: {
     type: String,
-    required: true,
+    required: false,
   },
   country: {
     type: String,
-    required: true,
+    required: false,
   },
   phone: {
     type: String, 
-    required: true,
+    required: false,
   },
   password: {
     type: String,
