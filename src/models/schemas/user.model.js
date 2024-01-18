@@ -82,22 +82,3 @@ const users = mongoose.model(userCollection, userSchema);
 
 export default users;
 
-/* 
-first_name,
-last_name,
-username,
-email,
-age,
-adress,
-location,
-province,
-country,
-phone,
-password,
-role,
-permissions,
-cart,
-orders,
-documentation,
-enbled
-*/
