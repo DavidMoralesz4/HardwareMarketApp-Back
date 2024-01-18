@@ -4,12 +4,14 @@ import express, { json, urlencoded } from 'express';
 import __dirname from './utils.js';
 import cors from 'cors';
 
+import passport from 'passport';
+import initializePassport from './config/passport.config.js';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
 import cookieParser from 'cookie-parser';
 
 import indexRouter from './router/index.routes.js';
-import session from 'express-session';
 import db from './config/dbConnection.js';
-import MongoStore from 'connect-mongo';
 
 /* Dev */
 import morgan from 'morgan';
@@ -42,6 +44,11 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+// Passport
+initializePassport();
+app.use(passport.initialize())
+app.use(passport.session());
 
 /* Morgan */
 app.use(morgan('dev'));
