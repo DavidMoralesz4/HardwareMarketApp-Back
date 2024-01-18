@@ -3,6 +3,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import UserModel from '../models/schemas/user.model.js';
 import { createUser } from '../utils/user.utils.js';
+import { isValidPassword } from '../utils/validations.utils.js';
 
 const initializePassport = () => {
   // Estrategia de registro local
@@ -37,6 +38,60 @@ const initializePassport = () => {
             'Passport Register-Error al obtener el usuario: ' + error.message
           );
           return done('error: ' + error);
+        }
+      }
+    )
+  );
+
+  // estrategia de loginlocal
+  passport.use(
+    'local-login',
+    new LocalStrategy(
+      { usernameField: 'email', passReqToCallback: true },
+      async (req, email, password, done) => {
+        try {
+          // Verificar si es un usuario administrador
+          if (
+            email === config.admin.username &&
+            password === config.admin.password
+          ) {
+            // Generar el objeto 'user' en  req.session para el usuario admimnistrador
+            const userSession = {
+              id: 'admin',
+              first_name: 'Administrador',
+              email: email,
+              role: 'admin',
+            };
+            req.logIn(userSession, (err) => {
+              if (err) {
+                return done(err);
+              }
+              console.log(`user ${userSession.id} succesfully logged in`);
+              return done(null, userSession);
+            });
+          } else {
+            const user = await UserModel.findOne({ email });
+
+            if (!user) {
+              console.error('Passport local-login - Incorrect credentials');
+              return done(null, false, { message: 'Incorrect credentials' });
+            }
+            // Comparar el password de la db con el que viene del front
+            const passwordMatch = isValidPassword(user, password);
+
+            console.log('passwordMatch: ', passwordMatch);
+
+            if (!passwordMatch) {
+              console.error('Passport local-login - Incorrect password');
+              return done(null, false, { message: 'Incorrect password' });
+            }
+
+            console.log(`user ${user.id} succesfully logged in`);
+            return done(null, user);
+          }
+        } catch (error) {
+          console.error('Passport local-login - Error getting user: ', error);
+          return done(error);
         }
       }
     )
