@@ -1,5 +1,3 @@
-import { createUser } from '../../services/database/users.services.js';
-
 export const userRegister = async (req, res) => {
   try {
     const userCreated = req.user;

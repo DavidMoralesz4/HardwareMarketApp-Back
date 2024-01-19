@@ -33,5 +33,10 @@ config.session = {
   secret: process.env.SESSION_SECRET,
 };
 
+config.admin = {
+  username: process.env.ADMIN_USER,
+  password: process.env.ADMIN_PASS,
+};
+
 // console.log(config);
 export default config;
