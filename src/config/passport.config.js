@@ -12,7 +12,16 @@ const initializePassport = () => {
     new LocalStrategy(
       { passReqToCallback: true, usernameField: 'email' },
       async (req, username, password, done) => {
-        const { first_name, last_name, age } = req.body;
+        const {
+          first_name,
+          last_name,
+          alias,
+          age,
+          address,
+          location,
+          province,
+          country,
+        } = req.body;
 
         try {
           const user = await UserModel.findOne({ email: username });
@@ -26,8 +35,13 @@ const initializePassport = () => {
           const result = await createUser({
             first_name,
             last_name,
-            age,
+            alias,
             email: username,
+            age,
+            address,
+            location,
+            province,
+            country,
             password,
           });
 
@@ -35,7 +49,8 @@ const initializePassport = () => {
           return done(null, result, { message: 'User created' });
         } catch (error) {
           console.error(
-            'Passport Register-Error al obtener el usuario: ' + error.message
+            'Passport Register-Error al obtener el usuario: ',
+            error
           );
           return done('error: ' + error);
         }
@@ -43,7 +58,7 @@ const initializePassport = () => {
     )
   );
 
-  // estrategia de loginlocal
+  // estrategia de login local
   passport.use(
     'local-login',
     new LocalStrategy(
@@ -62,7 +77,7 @@ const initializePassport = () => {
               email: email,
               role: 'admin',
             };
-            req.logIn(userSession, (err) => {
+            req.login(userSession, (err) => {
               if (err) {
                 return done(err);
               }

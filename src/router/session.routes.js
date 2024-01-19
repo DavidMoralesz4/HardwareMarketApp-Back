@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import passport from 'passport';
-import { userRegister } from '../controllers/users/register.user.js';
+import { userRegister, userLogin } from '../controllers/users/index.user.js';
 import { verifyRequiredFields } from '../middlewares/session.middlewares.js';
 
 const sessionRouter = Router();
 
-// Registrar u usuario
+// Registrar un usuario
 sessionRouter.post(
   '/register',
   verifyRequiredFields,
@@ -15,5 +15,13 @@ sessionRouter.post(
   userRegister
 );
 
+// Login de usuario mediante app
+sessionRouter.post(
+  '/login',
+  passport.authenticate('local-login', {
+    failureRedirect: '/login',
+  }),
+  userLogin
+);
 
 export default sessionRouter;
