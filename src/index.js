@@ -41,7 +41,7 @@ app.use(
     }),
     secret: config.session.secret,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 );
 

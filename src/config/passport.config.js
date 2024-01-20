@@ -1,6 +1,8 @@
 import config from './config.js';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import mongoose from 'mongoose';
 import UserModel from '../models/schemas/user.model.js';
 import { createUser } from '../utils/user.utils.js';
 import { isValidPassword } from '../utils/validations.utils.js';
@@ -52,13 +54,13 @@ const initializePassport = () => {
             'Passport Register-Error al obtener el usuario: ',
             error
           );
-          return done('error: ' + error);
+          return done('local-register: ' + error);
         }
       }
     )
   );
 
-  // estrategia de login local
+  // Estrategia de login local
   passport.use(
     'local-login',
     new LocalStrategy(
@@ -112,33 +114,53 @@ const initializePassport = () => {
     )
   );
 
-  // Serialización
+  // Estrategia de login con Google //TODO esta funcionando el logueo pero aun no está guardandose en la base de datos.
+  passport.use(
+    'google',
+    new GoogleStrategy(
+      {
+        clientID: config.google.clientID,
+        clientSecret: config.google.clientSecret,
+        callbackURL: config.google.callbackURL,
+        scope: ['profile','email'],
+        state: true,
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        const email = profile.emails[0].value
+        
+        //TODO Manejar la respuesta de Google
+        // try {
+        //   // const user =
+        //   //   await UserModel.findOne(/*{ email: profile._json.email }*/);
+        //   // si el usuario no existe en la base de datos, agregarlo.
+        // } catch (error) {}
+        console.log('Estrategia accessToken: ', accessToken);
+        console.log('Estrategia refreshToken: ', refreshToken);
+        console.log('Estrategia profile: ', profile);
+        console.log('Estrategia email: ', email);
+        return done(null, profile);
+      }
+    )
+  );
+
+  // Serialización (Guardar el usuario en la sesión (base se datos))
   passport.serializeUser((user, done) => {
-    // Si el usuario es el administrador, simplemente serializar el id "admin"
-    if (user.id === 'admin') {
-      return done(null, 'admin');
-    }
-    // Para otros usuarios, serializar su id de forma normal
     done(null, user.id);
   });
 
-  // Deserialización
+  // Deserialización (Recuperar el usuario en la sesión (base se datos))
   passport.deserializeUser(async (id, done) => {
-    // Si el id es "admin", devolver el objeto de usuario para el administrador
-    if (id === 'admin') {
-      const adminUser = {
-        id: 'admin',
-        email: config.admin.username,
-        role: 'admin',
-      };
-      return done(null, adminUser);
-    }
-    // Para otros ids, buscar el usuario en la base de datos
     try {
-      const user = await UserModel.findById(id);
+      let user;
+
+      if (mongoose.Types.ObjectId.isValid(id)) {
+        user = await UserModel.findById(id);
+      } else {
+        user = await UserModel.findOne({ externalId: id });
+      }
       done(null, user);
     } catch (error) {
-      done(error);
+      done('deserializeUser: ' + error);
     }
   });
 };

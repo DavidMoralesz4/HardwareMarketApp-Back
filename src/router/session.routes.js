@@ -1,27 +1,58 @@
 import { Router } from 'express';
 import passport from 'passport';
-import { userRegister, userLogin } from '../controllers/users/index.user.js';
+import {
+  userRegister,
+  userLogin,
+  googleLoginCallback,
+  userLogout,
+} from '../controllers/users/index.user.js';
 import { verifyRequiredFields } from '../middlewares/session.middlewares.js';
 
 const sessionRouter = Router();
+
+// * ESTA RUTA ES SOLO PARA PRUEBAS DEL BACK *
+sessionRouter.get('/', (req, res) => {
+  res.send(
+    '<div><h1>Please navigate to /login to local login</h1><h1>Please navigate to /auth/google to login</h1></div > '
+  );
+});
 
 // Registrar un usuario
 sessionRouter.post(
   '/register',
   verifyRequiredFields,
   passport.authenticate('local-register', {
-    failatureRedirect: '/failregister',
+    failureRedirect: '/failregister',
   }),
   userRegister
 );
 
 // Login de usuario mediante app
-sessionRouter.post(
+sessionRouter.get(
   '/login',
   passport.authenticate('local-login', {
     failureRedirect: '/login',
   }),
   userLogin
 );
+
+// Login de usuario mediante Google
+sessionRouter.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+sessionRouter.get(
+  '/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  googleLoginCallback
+);
+
+// Login de usuario mediante Faceboock
+sessionRouter.get('/facebook', (req, res) => {
+  // TODO
+});
+
+// Cerrar sesión de usuario
+sessionRouter.get('/logout', userLogout);
 
 export default sessionRouter;
