@@ -20,13 +20,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  externalId: {
+    type: String,
+    unique: true,
+  },
   alias: {
     type: String,
     unique: true,
     required: false,
   },
   email: {
-    type: String,
+    type: [String],
     unique: true,
     required: true,
   },
