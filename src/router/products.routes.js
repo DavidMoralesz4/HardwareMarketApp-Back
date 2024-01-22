@@ -4,7 +4,7 @@ import { Router } from 'express';
 const productsRouter = Router();
 
 // Obtener todos los productos paginados, filtrados y ordenados
-productsRouter.get('/', getProduc);
+productsRouter.get('/', getProducts);
 
 // Crear un nuevo producto
 productsRouter.post('/', (req, res) => {
