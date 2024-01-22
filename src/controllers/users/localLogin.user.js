@@ -11,15 +11,18 @@ export const userLogin = async (req, res) => {
 
     if (!findUser) {
       console.log('controller login - email no existente');
-      res.status(404).send({ message: 'User Not Found' });
+      return res
+        .status(404)
+        .send({ message: 'Usuario no existe. Por favor registrese...' });
     }
     // Comparar el password de la db con el que viene del front
     const passwordMatch = isValidPassword(findUser, data.password);
     console.log('passwordMatch: ', passwordMatch);
-            if (!passwordMatch) {
-              console.error('Passport local-login - Incorrect password');
-            }
-    // Generar el objeto 'user' en req.session
+    if (!passwordMatch) {
+      console.error('Passport local-login - Incorrect password');
+      res.status(404).send({ message: 'Password incorrecta' });
+    }
+
     req.session.user = {
       userId: findUser._id,
       first_name: findUser.first_name,
@@ -29,16 +32,29 @@ export const userLogin = async (req, res) => {
       email: findUser.email,
       last_connection: new Date(),
     };
-    res.status(200).json({
-      status: 'success',
-      message: 'Inicio de sesión exitoso.',
-      user: req.session.user,
+
+    // Guardar la sesion de usuario en la base de datos
+    req.session.save((err) => {
+      if (err) {
+        console.error('userLogin - Error al guardar la sessión - ', err);
+        res.status(500).json({
+          message: 'Error al guardar la sesión',
+          error: err.message,
+        });
+      }
+
+      console.log(`user ${findUser._id} successfully logged in`);
+      res.status(200).json({
+        status: 'success',
+        message: 'Inicio de sesión exitoso.',
+        user: req.session.user,
+      });
     });
   } catch (error) {
     console.error('userLogin: ', error.message);
     return res.status(500).json({
       message: 'Error al iniciar session',
-      err: error.message,
+      error: error.message,
     });
   }
 };

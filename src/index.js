@@ -37,7 +37,7 @@ app.use(
   session({
     store: MongoStore.create({
       mongoUrl: MONGO_DB,
-      ttl: 60 * 10,
+      ttl: 60 * 30, // (60seg * 30) = 30 minutos ==> tiempo de vida de la sesión
     }),
     secret: config.session.secret,
     resave: false,
