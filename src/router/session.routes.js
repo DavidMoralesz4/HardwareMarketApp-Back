@@ -23,18 +23,15 @@ sessionRouter.get('/', (req, res) => {
 sessionRouter.post(
   '/register',
   verifyRequiredFields,
-  passport.authenticate('local-register', {
-    failureRedirect: '/failregister',
-  }),
   userRegister
 );
 // ================================================================
 // Login de usuario mediante app
-sessionRouter.get(
+sessionRouter.post(
   '/login',
-  passport.authenticate('local-login', {
-    failureRedirect: '/login',
-  }),
+  // passport.authenticate('local-login', {
+  //   failureRedirect: '/login',
+  // }),
   userLogin
 );
 
