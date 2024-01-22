@@ -114,7 +114,7 @@ const initializePassport = () => {
     )
   );
 
-  // Estrategia de login con Google //TODO esta funcionando el logueo pero aun no está guardandose en la base de datos.
+  // Estrategia de login con Google //TODO: esta funcionando el logueo pero aun no está guardandose en la base de datos.
   passport.use(
     'google',
     new GoogleStrategy(

@@ -10,6 +10,7 @@ import { verifyRequiredFields } from '../middlewares/session.middlewares.js';
 
 const sessionRouter = Router();
 
+// ================================================================
 // * ESTA RUTA ES SOLO PARA PRUEBAS DEL BACK *
 sessionRouter.get('/', (req, res) => {
   res.send(
@@ -17,6 +18,7 @@ sessionRouter.get('/', (req, res) => {
   );
 });
 
+// ================================================================
 // Registrar un usuario
 sessionRouter.post(
   '/register',
@@ -26,7 +28,7 @@ sessionRouter.post(
   }),
   userRegister
 );
-
+// ================================================================
 // Login de usuario mediante app
 sessionRouter.get(
   '/login',
@@ -36,6 +38,7 @@ sessionRouter.get(
   userLogin
 );
 
+// ================================================================
 // Login de usuario mediante Google
 sessionRouter.get(
   '/auth/google',
@@ -47,11 +50,13 @@ sessionRouter.get(
   googleLoginCallback
 );
 
+// ================================================================
 // Login de usuario mediante Faceboock
 sessionRouter.get('/facebook', (req, res) => {
   // TODO
 });
 
+// ================================================================
 // Cerrar sesión de usuario
 sessionRouter.get('/logout', userLogout);
 
