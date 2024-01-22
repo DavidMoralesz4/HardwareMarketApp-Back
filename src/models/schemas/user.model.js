@@ -22,12 +22,7 @@ const userSchema = new mongoose.Schema({
   },
   externalId: {
     type: String,
-    unique: true,
-  },
-  alias: {
-    type: String,
-    unique: true,
-    required: false,
+    unique: false,
   },
   email: {
     type: [String],
@@ -86,4 +81,3 @@ const userSchema = new mongoose.Schema({
 const users = mongoose.model(userCollection, userSchema);
 
 export default users;
-

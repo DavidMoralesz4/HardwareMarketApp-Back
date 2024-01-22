@@ -26,17 +26,17 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+  })
+);
 
 // Session with MongoStore
 app.use(
   session({
     store: MongoStore.create({
       mongoUrl: MONGO_DB,
-      // mongoOptions: {
-      //   useNewUrlParser: true,
-      //   useUnifiedTopology: true,
-      // },
       ttl: 60 * 10,
     }),
     secret: config.session.secret,
@@ -47,7 +47,7 @@ app.use(
 
 // Passport
 initializePassport();
-app.use(passport.initialize())
+app.use(passport.initialize());
 app.use(passport.session());
 
 /* Morgan */

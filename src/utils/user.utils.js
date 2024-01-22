@@ -4,7 +4,6 @@ import { createHash } from './validations.utils.js';
 export const createUser = async ({
   first_name,
   last_name,
-  alias,
   email,
   age,
   address,
@@ -17,7 +16,6 @@ export const createUser = async ({
     const newUser = {
       first_name,
       last_name,
-      alias,
       email,
       age,
       address,
@@ -34,3 +32,4 @@ export const createUser = async ({
     throw error;
   }
 };
+

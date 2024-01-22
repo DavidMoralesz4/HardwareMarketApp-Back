@@ -1,15 +1,15 @@
 import config from './config.js';
 import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
+// import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import mongoose from 'mongoose';
 import UserModel from '../models/schemas/user.model.js';
-import { createUser } from '../utils/user.utils.js';
-import { isValidPassword } from '../utils/validations.utils.js';
+// import { createUser } from '../utils/user.utils.js';
+// import { isValidPassword } from '../utils/validations.utils.js';
 
 const initializePassport = () => {
   // Estrategia de registro local
-  passport.use(
+/*   passport.use(
     'local-register',
     new LocalStrategy(
       { passReqToCallback: true, usernameField: 'email' },
@@ -17,7 +17,6 @@ const initializePassport = () => {
         const {
           first_name,
           last_name,
-          alias,
           age,
           address,
           location,
@@ -28,16 +27,14 @@ const initializePassport = () => {
         try {
           const user = await UserModel.findOne({ email: username });
 
-          // Verificar si el usuario ya existe en la base de datos
-          if (user) {
-            console.error('User already registered');
-            return done(null, false, { message: 'User already registered' });
-          }
+          // if (user) {
+          //   console.error('User already registered');
+          //   return res.status(401).send({ message: 'User already registered' });
+          // }
 
           const result = await createUser({
             first_name,
             last_name,
-            alias,
             email: username,
             age,
             address,
@@ -59,9 +56,9 @@ const initializePassport = () => {
       }
     )
   );
-
+ */
   // Estrategia de login local
-  passport.use(
+/*   passport.use(
     'local-login',
     new LocalStrategy(
       { usernameField: 'email', passReqToCallback: true },
@@ -113,7 +110,7 @@ const initializePassport = () => {
       }
     )
   );
-
+ */
   // Estrategia de login con Google //TODO: esta funcionando el logueo pero aun no está guardandose en la base de datos.
   passport.use(
     'google',
@@ -122,12 +119,12 @@ const initializePassport = () => {
         clientID: config.google.clientID,
         clientSecret: config.google.clientSecret,
         callbackURL: config.google.callbackURL,
-        scope: ['profile','email'],
+        scope: ['profile', 'email'],
         state: true,
       },
       async (accessToken, refreshToken, profile, done) => {
-        const email = profile.emails[0].value
-        
+        const email = profile.emails[0].value;
+
         //TODO Manejar la respuesta de Google
         // try {
         //   // const user =
