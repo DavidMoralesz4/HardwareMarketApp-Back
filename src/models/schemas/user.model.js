@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   thumbnail: {
-    type: String,
+    type: [String],
     required: false,
   },
   address: {
@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'premium', 'admin'],
+    enum: ['user', 'admin'],
     default: 'user',
   },
   documents: [documentsSchema],

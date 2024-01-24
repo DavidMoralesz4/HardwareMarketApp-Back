@@ -28,7 +28,7 @@ export const userRegister = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('Register controller - Error creating user: ' + error);
+    console.error('Register controller - Error creating user: ' + error.message);
     return res.status(500).send({ error: 'usuario ya creado' });
   }
 };
