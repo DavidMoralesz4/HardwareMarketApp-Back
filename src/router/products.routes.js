@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { createProducts } from '../controllers/products/indexProduct.controller.js';
+import { createProducts, getProducts } from '../controllers/products/indexProduct.controller.js';
 import { isActiveSession } from '../middlewares/auth.middlewares.js';
 
 const productsRouter = Router();
 
 // Obtener todos los productos paginados, filtrados y ordenados
-productsRouter.get('/');
+productsRouter.get('/', getProducts);
 
 // Crear un nuevo producto
 productsRouter.post('/create', isActiveSession, createProducts);

@@ -1,21 +1,47 @@
 /* Los archivos Services contendrán el CRUD hacia la base de datos, ej:*/
 
-import productsModel from "./../../models/schemas/product.model.js";
+import productsModel from './../../models/schemas/product.model.js';
 
-const createProduct = async (productData) => await productsModel.create(productData)
+const createProduct = async (productData) =>
+  await productsModel.create(productData);
 
 const getAllProducts = async () => await productsModel.find().lean();
 
-const getProductById = async (_id) => await productsModel.findById(_id).lean().exec();
+const getAllProductsPaginated = async (options, filter, sortOptions) => {
+  const {
+    docs,
+    totalPages,
+    prevPage,
+    nextPage,
+    page,
+    hasNextPage,
+    hasPrevPage,
+  } = await productsModel.paginate(filter, { ...options, sort: sortOptions });
 
-const updateProduct = async (_id, updateData) => await productsModel.findByIdAndUpdate(_id, updateData, { new: true })
+  return {
+    docs,
+    totalPages,
+    prevPage,
+    nextPage,
+    page,
+    hasNextPage,
+    hasPrevPage,
+  };
+};
 
-const deleteProduct = async (_id) => await productsModel.findByIdAndDelete(_id)
+const getProductById = async (_id) =>
+  await productsModel.findById(_id).lean().exec();
+
+const updateProduct = async (_id, updateData) =>
+  await productsModel.findByIdAndUpdate(_id, updateData, { new: true });
+
+const deleteProduct = async (_id) => await productsModel.findByIdAndDelete(_id);
 
 export {
-    createProduct,
-    getAllProducts,
-    getProductById,
-    updateProduct,
-    deleteProduct,
-}
+  createProduct,
+  getAllProducts,
+  getAllProductsPaginated,
+  getProductById,
+  updateProduct,
+  deleteProduct,
+};
