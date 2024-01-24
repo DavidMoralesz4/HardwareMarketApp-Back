@@ -2,10 +2,20 @@
 
 import productsModel from "./../../models/schemas/product.model.js";
 
-export const createProduct = async (productData) => await productsModel.create(productData)
+const createProduct = async (productData) => await productsModel.create(productData)
 
-export const getAllProducts = async () => await productsModel.find().lean();
+const getAllProducts = async () => await productsModel.find().lean();
 
+const getProductById = async (_id) => await productsModel.findById(_id).lean().exec();
 
-export const getProductById = async (_id) => await productsModel.findById(_id).lean().exec();
+const updateProduct = async (_id, updateData) => await productsModel.findByIdAndUpdate(_id, updateData, { new: true })
 
+const deleteProduct = async (_id) => await productsModel.findByIdAndDelete(_id)
+
+export {
+    createProduct,
+    getAllProducts,
+    getProductById,
+    updateProduct,
+    deleteProduct,
+}

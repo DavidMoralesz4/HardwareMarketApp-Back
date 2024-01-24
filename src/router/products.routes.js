@@ -1,19 +1,14 @@
 import { Router } from 'express';
-
+import { createProducts } from '../controllers/products/indexProduct.controller.js';
+import { isActiveSession } from '../middlewares/auth.middlewares.js';
 
 const productsRouter = Router();
 
 // Obtener todos los productos paginados, filtrados y ordenados
-productsRouter.get('/', getProducts);
+productsRouter.get('/');
 
 // Crear un nuevo producto
-productsRouter.post('/', (req, res) => {
-  // TODO: CREAR CONTROLADOR
-  /* 
-      Un producto sólo podrá ser creado por un usuario con rol 'vendedor'.
-      Será necesario utilizar Multer (es el que conozco) para poder guardar las imágenes de los productos creados.
-  */
-});
+productsRouter.post('/create', isActiveSession, createProducts);
 
 // Obtener un producto por id
 productsRouter.get('/:pid', (req, res) => {
@@ -43,3 +38,5 @@ productsRouter.post('/:pid', (req, res) => {
   // TODO: CREAR CONTROLADOR
   // Este endpoint sera solo para desarrollo, será para poder testear.
 });
+
+export default productsRouter;
