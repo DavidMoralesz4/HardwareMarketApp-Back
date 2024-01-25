@@ -53,7 +53,6 @@ export const getProducts = async (req, res) => {
       totalPages,
       prevPage,
       nextPage,
-      //   Page,
       hasNextPage,
       hasPrevPage,
     } = await getAllProductsPaginated(options, filter, sortOptions);

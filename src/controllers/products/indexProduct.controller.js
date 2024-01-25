@@ -1,4 +1,4 @@
 import { createProducts } from './createProducts.controller.js';
-import { getProducts } from './getProducts.controllers.js';
+import { getProducts } from './getProducts.controller.js';
 
 export { createProducts, getProducts };
