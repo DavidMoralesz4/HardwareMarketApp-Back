@@ -1,5 +1,16 @@
 import { getAllProductsPaginated } from '../../services/database/product.services.js';
 
+/**
+ * getProductById - Obtiene un prooducto a partir de un pid
+ * @param {limit} req.query
+ * @param {page} req.query
+ * @param {sort} req.query
+ * @param {minPrice} req.query
+ * @param {maxPrice} req.query
+ * @returns {products object}
+ * @param {response} res
+ */
+
 export const getProducts = async (req, res) => {
   // Obtener los query params
   const limit = parseInt(req.query.limit) || 10;
@@ -84,6 +95,8 @@ export const getProducts = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).send('Error de servidor');
+        return res
+          .status(500)
+          .send({ status: 'error', message: 'Error de servidor' });
   }
 };

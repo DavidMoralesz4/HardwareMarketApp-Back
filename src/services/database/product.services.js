@@ -29,7 +29,7 @@ const getAllProductsPaginated = async (options, filter, sortOptions) => {
   };
 };
 
-const getProductById = async (_id) =>
+const getProductsById = async (_id) =>
   await productsModel.findById(_id).lean().exec();
 
 const updateProduct = async (_id, updateData) =>
@@ -41,7 +41,7 @@ export {
   createProduct,
   getAllProducts,
   getAllProductsPaginated,
-  getProductById,
+  getProductsById,
   updateProduct,
   deleteProduct,
 };
