@@ -7,7 +7,8 @@ const customLevelsOptions = {
     warn: 2,
     info: 3,
     http: 4,
-    debug: 5,
+    connection:5,
+    debug: 6,
   },
   colors: {
     fatal: 'red',
@@ -15,6 +16,7 @@ const customLevelsOptions = {
     warn: 'yellow',
     info: 'blue',
     http: 'cyan',
+    connection: 'green',
     debug: 'white',
   },
 };

@@ -1,4 +1,7 @@
 import { getAllProductsPaginated } from '../../services/database/product.services.js';
+import getLogger from '../../utils/log.utils.js';
+
+const log = getLogger();
 
 /**
  * getProductById - Obtiene un prooducto a partir de un pid
@@ -94,7 +97,7 @@ export const getProducts = async (req, res) => {
       data: response,
     });
   } catch (error) {
-    console.log(error);
+    log.fatal(error);
         return res
           .status(500)
           .send({ status: 'error', message: 'Error de servidor' });

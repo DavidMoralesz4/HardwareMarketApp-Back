@@ -1,4 +1,7 @@
 import { getProductsById } from '../../services/database/product.services.js';
+import getLogger from '../../utils/log.utils.js';
+
+const log = getLogger();
 
 /**
  * getProductById - Obtiene un prooducto a partir de un pid
@@ -12,7 +15,7 @@ export const getProductById = async (req, res) => {
   try {
     const product = await getProductsById(_id);
     if (!product) {
-      console.error(`getProductById - Producto con id ${_id} no encontrado`);
+      log.error(`getProductById - Producto con id ${_id} no encontrado`);
       return res.status(404).send({ message: 'Product not found' });
     }
 
@@ -22,7 +25,7 @@ export const getProductById = async (req, res) => {
       data: product,
     });
   } catch (error) {
-    console.error(
+    log.fatal(
       'getProductById - Error al obtener el producto: ' + error.message
     );
     return res

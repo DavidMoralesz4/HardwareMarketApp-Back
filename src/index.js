@@ -3,6 +3,7 @@ import config from './config/config.js';
 import express, { json, urlencoded } from 'express';
 import __dirname from './utils.js';
 import cors from 'cors';
+import getLogger from './utils/log.utils.js';
 
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
@@ -21,6 +22,8 @@ const app = express();
 const PORT = config.server.port;
 const MONGO_DB = config.db.cs;
 
+const log = getLogger();
+
 /* Express */
 app.use(json());
 app.use(urlencoded({ extended: true }));
@@ -30,22 +33,22 @@ app.use(
   cors({
     origin: 'http://localhost:5173',
   })
-);
-
-// Session with MongoStore
-app.use(
-  session({
-    store: MongoStore.create({
-      mongoUrl: MONGO_DB,
-      ttl: 60 * 30, // (60seg * 30) = 30 minutos ==> tiempo de vida de la sesión
-    }),
-    secret: config.session.secret,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-// Passport
+  );
+  
+  // Session with MongoStore
+  app.use(
+    session({
+      store: MongoStore.create({
+        mongoUrl: MONGO_DB,
+        ttl: 60 * 30, // (60seg * 30) = 30 minutos ==> tiempo de vida de la sesión
+      }),
+      secret: config.session.secret,
+      resave: false,
+      saveUninitialized: false,
+    })
+    );
+    
+    // Passport
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
@@ -57,15 +60,15 @@ app.use(morgan('dev'));
 const server = app.listen(PORT, (err) => {
   db;
   if (err) {
-    console.error('Connection error: ', err.message);
+    log.error('Connection error: ', err.message);
     return;
   }
-  console.log(
+  log.connection(
     `Runing server on port ${PORT}, in ${config.environment.env} environment`
-  );
-});
-
-/* Routes */
+    );
+  });
+  
+  /* Routes */
 app.use(indexRouter);
 
 export default app;

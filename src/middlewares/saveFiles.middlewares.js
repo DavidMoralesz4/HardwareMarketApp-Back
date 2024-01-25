@@ -8,20 +8,20 @@ const storage = multer.diskStorage({
 
     // Verificar el tipo de archivo y establecer la carpeta dedestino
     if (file.fieldname === 'profileImage') {
-      console.log('****** pasó por multer ******');
+      log.info('****** pasó por multer ******');
       uploadPath = `${__dirname}/public/images/profiles`;
     } else if (file.fieldname === 'thumbmails') {
-      console.log('****** pasó por multer ******');
+      log.info('****** pasó por multer ******');
       uploadPath = `${__dirname}/public/images/products`;
     } else if (file.fieldname === 'documents') {
-      console.log('****** pasó por multer ******');
+      log.info('****** pasó por multer ******');
       uploadPath = `${__dirname}/public/images/documents`;
     }
 
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    console.log('Multer: ', file);
+    log.info('Multer: ', file);
     cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
@@ -29,7 +29,7 @@ const storage = multer.diskStorage({
 export const uploader = multer({
   storage,
   onError: (err, next) => {
-    console.error(err);
+    log.error(err);
     next();
   },
 });

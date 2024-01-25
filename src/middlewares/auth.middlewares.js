@@ -1,3 +1,7 @@
+import getLogger from '../utils/log.utils.js';
+
+const log = getLogger();
+
 /**
  * @param { req.session.user } req
  * @param {send} res
@@ -7,7 +11,7 @@ const isActiveSession = (req, res, next) => {
   if (req.session && req.session.user) {
     next();
   } else {
-    console.log('isActiveSession - El user no está logueado');
+    log.warn('isActiveSession - El user no está logueado');
     res.send({ message: 'Unauthorized' });
   }
 };

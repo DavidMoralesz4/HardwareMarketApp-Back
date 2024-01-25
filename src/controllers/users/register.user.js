@@ -3,14 +3,17 @@ import {
   getUserByEmail,
 } from '../../services/database/users.services.js';
 import { createHash } from '../../utils/validations.utils.js';
+import getLogger from '../../utils/log.utils.js';
+
+const log = getLogger();
 
 export const userRegister = async (req, res) => {
   try {
     const data = req.body;
-    console.log('data: ', data);
+    // log.info('data: ', data);
     const user = await getUserByEmail(data.email);
     if (user) {
-      console.error('User already registered');
+      log.info('User already registered');
       return res.status(200).send({ message: 'Usuario registrado. inicie sesión para continuar...' });
     } else {
       const userCreated = await createUser({
@@ -28,7 +31,7 @@ export const userRegister = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('Register controller - Error creating user: ' + error.message);
+    log.fatal('Register controller - Error creating user: ' + error.message);
     return res.status(500).send({ error: 'usuario ya creado' });
   }
 };
