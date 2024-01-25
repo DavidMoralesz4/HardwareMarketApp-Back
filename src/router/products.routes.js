@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { createProducts, getProductById, getProducts } from '../controllers/products/indexProduct.controller.js';
+import { createProducts, getProductById, getProducts, updateProducts } from '../controllers/products/indexProduct.controller.js';
 import { isActiveSession } from '../middlewares/auth.middlewares.js';
 import { uploader } from '../middlewares/saveFiles.middlewares.js';
+import { checkProductOwner } from '../middlewares/products.middlewares.js';
 
 const productsRouter = Router();
 
@@ -20,17 +21,7 @@ productsRouter.post(
 productsRouter.get('/:pid', getProductById);
 
 // Actualizar un producto por id
-productsRouter.patch('/:pid', (req, res) => {
-  // TODO: CREAR CONTROLADOR
-  /* Deberá prermitir: 
-     - modificar cualquier dato del producto (salvo el id),
-     - pausar un producto (ante una promesa de compra)
-     - rehabilitar un producto (en el caso de que la compra no se concrete)
-     A tener en cuenta:
-     - solo modificable por un usuario con rol 'vendedor'.
-     - el producto solo puede ser modificado por su dueño (debera verificarse la relacion entre el producto y el creador del mismo)
-     */
-});
+productsRouter.patch('/:pid',checkProductOwner, updateProducts);
 
 // Eliminar un producto por id
 productsRouter.delete('/:pid', (req, res) => {

@@ -31,11 +31,11 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  type: {
+  condition: {
     type: String,
     enum: ['nuevo', 'usado'],
   },
-  stars:{
+  score: {
     type: Number,
     enum: [0, 1, 2, 3, 4, 5],
     default: 0,
