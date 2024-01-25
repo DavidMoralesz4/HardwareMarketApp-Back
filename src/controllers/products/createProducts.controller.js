@@ -1,9 +1,12 @@
+import getLogger from '../../utils/log.utils.js';
 import { createProduct } from '../../services/database/product.services.js';
+
+const log = getLogger();
 
 export const createProducts = async (req, res) => {
   const productsData = req.body;
 
-  //   console.log('product from FRONT: ', productsData);
+  //   log.info('product from FRONT: ', productsData);
 
   const createdProducts = [];
 
@@ -15,7 +18,7 @@ export const createProducts = async (req, res) => {
         typeof productsData === 'object' && Object.keys(productsData).length > 0
       )
     ) {
-      console.error('No se proporcionaron productos válidos');
+      log.error('No se proporcionaron productos válidos');
       return res.status(400).send('Invalid product');
     }
 
@@ -24,7 +27,7 @@ export const createProducts = async (req, res) => {
       const { title, description, price, stock, category, type, owner } =
         productData;
       if (!title || !description || !price || !stock || !category || !type) {
-        console.error('createProducts - Error intentando crear el Producto');
+        log.error('createProducts - Error intentando crear el Producto');
         return res.status(400).send('Required fields are missing');
       }
     }
@@ -65,9 +68,9 @@ export const createProducts = async (req, res) => {
         data: createdProducts,
       });
     }
-    // console.log('productos creados: ', createdProducts);
+    // log.info('productos creados: ', createdProducts);
   } catch (error) {
-    console.error('createProducts - ', error.message);
+    log.error('createProducts - ', error.message);
     return res.status(500).send('Error de servidor');
   }
 };
