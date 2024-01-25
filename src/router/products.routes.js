@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { createProducts, getProducts } from '../controllers/products/indexProduct.controller.js';
+import { createProducts, getProductById, getProducts } from '../controllers/products/indexProduct.controller.js';
 import { isActiveSession } from '../middlewares/auth.middlewares.js';
+import { uploader } from '../middlewares/saveFiles.middlewares.js';
 
 const productsRouter = Router();
 
@@ -8,12 +9,15 @@ const productsRouter = Router();
 productsRouter.get('/', getProducts);
 
 // Crear un nuevo producto
-productsRouter.post('/create', isActiveSession, createProducts);
+productsRouter.post(
+  '/create',
+  isActiveSession,
+  uploader.array('thumbnails', 5),
+  createProducts
+);
 
 // Obtener un producto por id
-productsRouter.get('/:pid', (req, res) => {
-  // TODO: CREAR CONTROLADOR
-});
+productsRouter.get('/:pid', getProductById);
 
 // Actualizar un producto por id
 productsRouter.patch('/:pid', (req, res) => {
