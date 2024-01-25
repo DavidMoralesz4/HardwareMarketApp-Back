@@ -35,6 +35,11 @@ const productSchema = new mongoose.Schema({
     type: String,
     enum: ['nuevo', 'usado'],
   },
+  stars:{
+    type: Number,
+    enum: [0, 1, 2, 3, 4, 5],
+    default: 0,
+  },
   thumbnails: {
     type: [String],
     required: false,
