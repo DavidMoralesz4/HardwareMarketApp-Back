@@ -12,6 +12,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  trademark: {
+    type: String,
+    required: true,
+  },
   price: {
     type: Number,
     required: true,
@@ -40,9 +44,18 @@ const productSchema = new mongoose.Schema({
     enum: [0, 1, 2, 3, 4, 5],
     default: 0,
   },
+  opinions: {
+    type: [String],
+    required: false,
+  },
   thumbnails: {
     type: [String],
     required: false,
+  },
+  deliveryMethod: {
+    type: [String],
+    enum: ['freeShipping', 'costShipping', 'homePickup'],
+    default: 'homePickup',
   },
   lastModifyDate: {
     type: Date,
