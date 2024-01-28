@@ -4,6 +4,7 @@ import {
   userRegister,
   userLogin,
   googleLoginCallback,
+  currentUser,
   userLogout,
 } from '../controllers/users/index.user.js';
 import { verifyRequiredFields } from '../middlewares/session.middlewares.js';
@@ -20,11 +21,7 @@ sessionRouter.get('/', (req, res) => {
 
 // ================================================================
 // Registrar un usuario
-sessionRouter.post(
-  '/register',
-  verifyRequiredFields,
-  userRegister
-);
+sessionRouter.post('/register', verifyRequiredFields, userRegister);
 // ================================================================
 // Login de usuario mediante app
 sessionRouter.post(
@@ -52,6 +49,10 @@ sessionRouter.get(
 sessionRouter.get('/facebook', (req, res) => {
   // TODO
 });
+
+// ================================================================
+// Usuario logueado actualmente
+sessionRouter.get('/current', currentUser);
 
 // ================================================================
 // Cerrar sesión de usuario

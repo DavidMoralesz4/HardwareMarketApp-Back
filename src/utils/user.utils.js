@@ -1,6 +1,6 @@
 import UserModel from '../models/schemas/user.model.js';
 import { createHash } from './validations.utils.js';
-import getLogger from '../../utils/log.utils.js';
+import getLogger from '../utils/log.utils.js';
 
 const log = getLogger();
 
@@ -31,8 +31,17 @@ export const createUser = async ({
     const result = await UserModel.create(newUser);
     return result;
   } catch (error) {
-    log.error('createUser-Error creating user:', error);
+    log.error('createUser-Error creating user:' + error);
     throw error;
   }
 };
 
+// DTO para el usuario que contiene solo la información necesaria
+export const userDTO = (user) => ({
+  first_name: user.first_name,
+  last_name: user.last_name,
+  email: user.email,
+  age: user.age,
+  thumbnail: user.thumbnail,
+  role: user.role,
+});
