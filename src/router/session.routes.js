@@ -6,7 +6,7 @@ import {
   googleLoginCallback,
   currentUser,
   userLogout,
-} from '../controllers/users/index.user.js';
+} from '../controllers/users/index.controller.js';
 import { verifyRequiredFields } from '../middlewares/session.middlewares.js';
 
 const sessionRouter = Router();
