@@ -6,8 +6,6 @@ const log = getLogger();
 export const createProducts = async (req, res) => {
   const productsData = req.body;
 
-    log.info('product from FRONT: ', productsData);
-
   const createdProducts = [];
 
   try {
@@ -38,8 +36,15 @@ export const createProducts = async (req, res) => {
         }
 
     const processProduct = async (productsData) => {
-      const { title, description, price, stock, category, thumbnails, condition, trademark } =
+      const { title, description, price, stock, category,  condition, trademark } =
         productsData;
+      const thumbnails = [];
+
+      for (const file of req.files) {
+        const filePath = `${req.uploadPath}/${file.filename}`;
+        thumbnails.push(filePath);
+      }
+  console.log('thumbnails:', thumbnails);
 
       const newProduct = {
         title,

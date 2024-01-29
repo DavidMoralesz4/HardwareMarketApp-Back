@@ -1,5 +1,10 @@
 import { Router } from 'express';
-import { createProducts, getProductById, getProducts, updateProducts } from '../controllers/products/indexProduct.controller.js';
+import {
+  createProducts,
+  getProductById,
+  getProducts,
+  updateProducts,
+} from '../controllers/products/indexProduct.controller.js';
 import { isActiveSession } from '../middlewares/auth.middlewares.js';
 import { uploader } from '../middlewares/saveFiles.middlewares.js';
 import { checkProductOwner } from '../middlewares/products.middlewares.js';
@@ -21,7 +26,7 @@ productsRouter.post(
 productsRouter.get('/:pid', getProductById);
 
 // Actualizar un producto por id
-productsRouter.patch('/:pid',checkProductOwner, updateProducts);
+productsRouter.patch('/:pid', checkProductOwner, updateProducts);
 
 // Eliminar un producto por id
 productsRouter.delete('/:pid', (req, res) => {

@@ -2,7 +2,7 @@ import multer from 'multer';
 import __dirname from '../utils.js';
 import getLogger from '../utils/log.utils.js';
 
-const log = getLogger()
+const log = getLogger();
 // Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -10,21 +10,23 @@ const storage = multer.diskStorage({
 
     // Verificar el tipo de archivo y establecer la carpeta dedestino
     if (file.fieldname === 'profileImage') {
-      log.info('****** pasó por multer ******');
       uploadPath = `${__dirname}/public/images/profiles`;
-    } else if (file.fieldname === 'thumbmails') {
-      log.info('****** pasó por multer ******');
+    } else if (file.fieldname === 'thumbnails') {
       uploadPath = `${__dirname}/public/images/products`;
     } else if (file.fieldname === 'documents') {
-      log.info('****** pasó por multer ******');
       uploadPath = `${__dirname}/public/images/documents`;
     }
+    // Guardar la ruta del archivo en el objeto de la solicitud
+    req.uploadPath = uploadPath;
 
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
     log.info('Multer: ', file);
-    cb(null, `${Date.now()}-${file.originalname}`);
+    const filePath = `${Date.now()}-${file.originalname}`;
+    log.info('Multer - filePath: ' + filePath);
+    req.filePath = filePath;
+    cb(null, filePath);
   },
 });
 
