@@ -1,7 +1,4 @@
-import {
-  getProductsById,
-  updateProduct,
-} from '../../services/database/product.services.js';
+import { updateProduct } from '../../services/database/product.services.js';
 import getLogger from '../../utils/log.utils.js';
 
 const log = getLogger();
@@ -40,9 +37,8 @@ export const updateProducts = async (req, res) => {
 // TODO: CREAR CONTROLADOR
 /* Deberá prermitir: 
      - modificar cualquier dato del producto (salvo el id),
-     - pausar un producto (ante una promesa de compra)
-     - rehabilitar un producto (en el caso de que la compra no se concrete)
+     - pausar un producto
+     - rehabilitar un producto
      A tener en cuenta:
-     - solo modificable por un usuario con rol 'vendedor'.
-     - el producto solo puede ser modificado por su dueño (debera verificarse la relacion entre el producto y el creador del mismo)
+     - el producto solo puede ser modificado por su dueño (debera verificarse la relacion entre el producto y el creador del mismo mediante middleware)
      */

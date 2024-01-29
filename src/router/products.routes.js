@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   createProducts,
+  deleteProducts,
   getProductById,
   getProducts,
   updateProducts,
@@ -26,12 +27,20 @@ productsRouter.post(
 productsRouter.get('/:pid', getProductById);
 
 // Actualizar un producto por id
-productsRouter.patch('/:pid', checkProductOwner, updateProducts);
+productsRouter.patch(
+  '/:pid',
+  isActiveSession,
+  checkProductOwner,
+  updateProducts
+);
 
 // Eliminar un producto por id
-productsRouter.delete('/:pid', (req, res) => {
-  // TODO: CREAR CONTROLADOR
-});
+productsRouter.delete(
+  '/:pid',
+  isActiveSession,
+  checkProductOwner,
+  deleteProducts
+);
 
 // Mockear productos
 productsRouter.post('/:pid', (req, res) => {
