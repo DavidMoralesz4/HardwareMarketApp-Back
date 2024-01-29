@@ -32,8 +32,8 @@ export const checkProductOwner = async (req, res, next) => {
       return res.status(404).send('Not Found');
     }
 
-    console.log('PrOid: ', product.owner.toString());
-    console.log('userId: ', req.session.user.userId.toString());
+    // console.log('PrOid: ', product.owner.toString());
+    // console.log('userId: ', req.session.user.userId.toString());
 
       //! manejar el caso en que no haya userId
     // Si el usuario es dueño del producto, permitir continuar 

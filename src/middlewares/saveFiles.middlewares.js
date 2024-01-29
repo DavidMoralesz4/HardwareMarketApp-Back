@@ -1,6 +1,8 @@
 import multer from 'multer';
 import __dirname from '../utils.js';
+import getLogger from '../utils/log.utils.js';
 
+const log = getLogger()
 // Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

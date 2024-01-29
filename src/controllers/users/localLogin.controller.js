@@ -21,7 +21,7 @@ export const userLogin = async (req, res) => {
     }
     // Comparar el password de la db con el que viene del front
     const passwordMatch = isValidPassword(findUser, data.password);
-    log.info('passwordMatch: ', passwordMatch);
+    log.info('passwordMatch: '+ passwordMatch);
     if (!passwordMatch) {
       log.warn('Passport local-login - Incorrect password');
       res.status(404).send({ message: 'Password incorrecta' });
