@@ -66,6 +66,10 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user',
   },
+  comments: {
+    type: [String],
+    required: false,
+  },
   documents: [documentsSchema],
   last_connection: {
     type: Date,
