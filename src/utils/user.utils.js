@@ -44,4 +44,10 @@ export const userDTO = (user) => ({
   age: user.age,
   thumbnail: user.thumbnail,
   role: user.role,
+  adress: user.adress,
+  location: user.location,
+  province: user.province,
+  country: user.country,
+  phone: user.phone,
+  documents: user.documents,
 });

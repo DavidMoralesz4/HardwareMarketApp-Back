@@ -26,9 +26,6 @@ sessionRouter.post('/register', verifyRequiredFields, userRegister);
 // Login de usuario mediante app
 sessionRouter.post(
   '/login',
-  // passport.authenticate('local-login', {
-  //   failureRedirect: '/login',
-  // }),
   userLogin
 );
 

@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  password: {
+    type: String,
+    required: true,
+  },
   address: {
     type: String,
     required: false,
@@ -57,14 +61,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  password: {
-    type: String,
-    required: true,
-  },
   role: {
     type: String,
     enum: ['user', 'admin'],
     default: 'user',
+  },
+  comments: {
+    type: [String],
+    required: false,
   },
   documents: [documentsSchema],
   last_connection: {

@@ -3,6 +3,7 @@ import { userLogin } from './localLogin.controller.js';
 import { googleLoginCallback } from './googleLogin.controller.js';
 import { currentUser } from './currentUser.controller.js';
 import { userLogout } from './logout.controller.js';
+import { updateUser } from './updateUser.controller.js';
 
 export {
   userRegister,
@@ -10,4 +11,5 @@ export {
   googleLoginCallback,
   currentUser,
   userLogout,
+  updateUser
 };
