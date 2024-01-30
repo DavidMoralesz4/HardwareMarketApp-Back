@@ -2,28 +2,6 @@ import mongoose from 'mongoose';
 
 const userCollection = 'User';
 
-const personalDataSchema = new mongoose.Schema({
-  address: {
-    type: String,
-    required: false,
-  },
-  location: {
-    type: String,
-    required: false,
-  },
-  province: {
-    type: String,
-    required: false,
-  },
-  country: {
-    type: String,
-    required: false,
-  },
-  phone: {
-    type: String,
-    required: false,
-  },
-}); 
 const documentsSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -63,7 +41,26 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  personal_information: personalDataSchema,
+  address: {
+    type: String,
+    required: false,
+  },
+  location: {
+    type: String,
+    required: false,
+  },
+  province: {
+    type: String,
+    required: false,
+  },
+  country: {
+    type: String,
+    required: false,
+  },
+  phone: {
+    type: String,
+    required: false,
+  },
   role: {
     type: String,
     enum: ['user', 'admin'],

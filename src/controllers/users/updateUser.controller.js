@@ -14,13 +14,12 @@ const log = getLogger();
 export const updateUser = async (req, res) => {
   const id = req.session.user.userId;
   const info = req.body;
-console.log(id)
-  try {
+
+    try {
     const updatedUser = await updateUserById(id, info);
-    log.info('updatedUser: '+ updatedUser);
 
     // Crear un DTO del usuario con la información necesaria
-    const userData = userDTO(updatedUser)
+    const userData = userDTO(updatedUser);
 
     log.info('Usuario actualizado correctamente');
     return res.status(200).json({
