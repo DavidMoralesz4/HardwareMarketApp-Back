@@ -1,6 +1,7 @@
 import { getUserByEmail } from '../../services/database/users.services.js';
 import { isValidPassword } from '../../utils/validations.utils.js';
 import getLogger from '../../utils/log.utils.js';
+import { createCart } from '../../services/database/cart.services.js';
 
 const log = getLogger();
 
@@ -8,57 +9,73 @@ const log = getLogger();
 export const userLogin = async (req, res) => {
   try {
     const data = req.body;
-    // log.info('data: ', data);
+    log.info('data: ', data);
 
-    const findUser = await getUserByEmail(data.email);
-    // log.info('findUser: ', findUser);
+    const user = await getUserByEmail(data.email);
+    log.info('user: ', user);
 
-    if (!findUser) {
+    if (!user) {
       log.warn('controller login - email no existente');
       return res
         .status(404)
         .send({ message: 'Usuario no existe. Por favor registrese...' });
     }
     // Comparar el password de la db con el que viene del front
-    const passwordMatch = isValidPassword(findUser, data.password);
-    log.info('passwordMatch: '+ passwordMatch);
+    const passwordMatch = isValidPassword(user, data.password);
+
+    log.info('passwordMatch: ' + passwordMatch);
     if (!passwordMatch) {
       log.warn('Passport local-login - Incorrect password');
       res.status(404).send({ message: 'Password incorrecta' });
     }
-
+    // Generar el objeto 'user' en req.session
     req.session.user = {
-      userId: findUser._id,
-      first_name: findUser.first_name,
-      last_name: findUser.last_name,
-      username: findUser.alias,
-      age: findUser.age,
-      email: findUser.email,
+      userId: user._id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      username: user.alias,
+      age: user.age,
+      email: user.email,
       last_connection: new Date(),
     };
+    log.debug('session: '+ req.session.user )
+    // Verificar que el usuario no sea el administrator
+    if (user.role !== 'admin') {
+      // Verificar si el usuario ya tiene un carrito asignado, de lo contrario asignarle uno
+      if (!user.cart) {
+        const newCart = await createCart(user._id, { products: [] });
+
+        // Asignar el id del nuevo carrito al campo 'cart' del usuario
+        user.cart = newCart._id;
+
+        // Guardar los cambios en el usuario en la base de datos
+        await user.save();
+      }
+    }
 
     // Guardar la sesion de usuario en la base de datos
     req.session.save((err) => {
       if (err) {
-        log.fatal('userLogin - Error al guardar la sessión - ', err);
+        log.fatal('userLogin - Error al guardar la sessión - ' + err);
         res.status(500).json({
           message: 'Error al guardar la sesión',
-          error: err.message,
+          error: err,
         });
       }
 
-      log.info(`user ${findUser._id} successfully logged in`);
+      log.info(`user ${user._id} successfully logged in`);
       res.status(200).json({
         status: 'success',
         message: 'Inicio de sesión exitoso.',
         user: req.session.user,
+        cart: user.cart,
       });
     });
   } catch (error) {
-    log.fatal('userLogin: ', error.message);
+    log.fatal('userLogin: ' + error);
     return res.status(500).json({
       message: 'Error al iniciar session',
-      error: error.message,
+      error: error,
     });
   }
 };
