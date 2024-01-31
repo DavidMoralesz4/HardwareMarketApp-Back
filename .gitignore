@@ -9,3 +9,5 @@
 .vscode
 /logs
 Formularios
+.vercel
+product.moks.json
