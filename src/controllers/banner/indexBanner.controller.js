@@ -6,4 +6,4 @@ export {
      createBanners,
      getAllBanners,
      updateBanners
-    };
+};

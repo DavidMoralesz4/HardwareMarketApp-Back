@@ -43,5 +43,11 @@ config.google = {
   clientSecret: process.env.CLIENT_SECRET,
   callbackURL: process.env.CALLBACK_URL,
 };
+
+config.mailer = {
+  email: process.env.GOOGLE_ACCOUNT,
+  pass: process.env.GOOGLE_PASSWORD,
+  appPass: process.env.GOOGLE_APP_PASSWORD,
+};
 // console.log(config);
 export default config;
