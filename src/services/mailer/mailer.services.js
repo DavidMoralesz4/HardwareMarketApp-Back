@@ -6,7 +6,7 @@ const sendEmail = async (fromEmail, fromUser, message) => {
         from: `"${fromUser}" <${fromEmail}>`,
         to: config.mailer.email,
         subject: `New email from ${fromUser} in HardwareMarketApp`,
-        text: message
+        text: `${message}\nReply to ${fromEmail} (${fromUser}).`
     })
 }
 
