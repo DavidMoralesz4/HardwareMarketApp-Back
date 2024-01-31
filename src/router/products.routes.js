@@ -19,7 +19,7 @@ productsRouter.get('/', getProducts);
 productsRouter.post(
   '/create',
   isActiveSession,
-  uploader.array('thumbnails', 5),
+  uploader.array('thumbnails', 10),
   createProducts
 );
 

@@ -19,7 +19,7 @@ import morgan from 'morgan';
 
 /* CONFIGURATIONS */
 const app = express();
-const PORT = config.server.port;
+const PORT = process.env.PORT || config.server.port;
 const MONGO_DB = config.db.cs;
 
 const log = getLogger();
