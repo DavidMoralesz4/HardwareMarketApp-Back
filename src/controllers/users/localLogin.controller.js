@@ -26,7 +26,7 @@ export const userLogin = async (req, res) => {
     log.info('passwordMatch: ' + passwordMatch);
     if (!passwordMatch) {
       log.warn('Passport local-login - Incorrect password');
-      res.status(404).send({ message: 'Password incorrecta' });
+      return res.status(404).send({ message: 'Password incorrecta' });
     }
     // Generar el objeto 'user' en req.session
     req.session.user = {
@@ -38,7 +38,7 @@ export const userLogin = async (req, res) => {
       email: user.email,
       last_connection: new Date(),
     };
-    log.debug('session: '+ req.session.user )
+    log.debug('session: ', req.session.user);
     // Verificar que el usuario no sea el administrator
     if (user.role !== 'admin') {
       // Verificar si el usuario ya tiene un carrito asignado, de lo contrario asignarle uno
