@@ -70,6 +70,10 @@ const userSchema = new mongoose.Schema({
     type: [String],
     required: false,
   },
+  cart: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Carts',
+  },
   documents: [documentsSchema],
   last_connection: {
     type: Date,

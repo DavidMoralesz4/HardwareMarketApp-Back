@@ -50,4 +50,5 @@ export const userDTO = (user) => ({
   country: user.country,
   phone: user.phone,
   documents: user.documents,
+  cart: user.cart
 });

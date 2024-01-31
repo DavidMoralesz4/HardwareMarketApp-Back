@@ -14,7 +14,11 @@ export const userRegister = async (req, res) => {
     const user = await getUserByEmail(data.email);
     if (user) {
       log.info('User already registered');
-      return res.status(200).send({ message: 'Usuario registrado. inicie sesión para continuar...' });
+      return res
+        .status(200)
+        .send({
+          message: 'Usuario registrado. inicie sesión para continuar...',
+        });
     } else {
       const userCreated = await createUser({
         first_name: data.first_name,
@@ -23,7 +27,7 @@ export const userRegister = async (req, res) => {
         age: data.age,
         password: createHash(data.password),
       });
-
+      log.info('Nuevo usuario registrado')
       res.status(201).json({
         status: 'success',
         message: 'Registro de usuario exitoso. Inicia sesión para continuar.',
