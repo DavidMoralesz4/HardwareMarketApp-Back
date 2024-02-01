@@ -29,16 +29,7 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: [
-      '*',
-      // 'https://hardware-market-app-front.vercel.app/',
-      // 'http://localhost:5173',
-      // 'http://localhost:5500',
-    ],
-  })
-);
+app.use(cors());
 
 // Session with MongoStore
 app.use(
