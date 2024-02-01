@@ -17,7 +17,7 @@ export const userLogin = async (req, res) => {
     if (!user) {
       log.warn('controller login - email no existente');
       return res
-        .status(404)
+        .status(203)
         .send({ message: 'Usuario no existe. Por favor registrese...' });
     }
     // Comparar el password de la db con el que viene del front
@@ -26,7 +26,7 @@ export const userLogin = async (req, res) => {
     log.info('passwordMatch: ' + passwordMatch);
     if (!passwordMatch) {
       log.warn('Passport local-login - Incorrect password');
-      return res.status(404).send({ message: 'Password incorrecta' });
+      return res.status(203).send({ message: 'Password incorrecta' });
     }
     // Generar el objeto 'user' en req.session
     req.session.user = {
@@ -36,6 +36,7 @@ export const userLogin = async (req, res) => {
       username: user.alias,
       age: user.age,
       email: user.email,
+      role: user.role,
       last_connection: new Date(),
     };
     log.debug('session: ', req.session.user);
