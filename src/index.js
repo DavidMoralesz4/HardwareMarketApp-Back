@@ -31,24 +31,28 @@ app.use(express.static(`${__dirname}/public`));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'http://localhost:5500'],
+    origin: [
+      'https://hardware-market-app-front.vercel.app/',
+      'http://localhost:5173',
+      'http://localhost:5500',
+    ],
   })
 );
-  
-  // Session with MongoStore
-  app.use(
-    session({
-      store: MongoStore.create({
-        mongoUrl: MONGO_DB,
-        ttl: 60 * 30, // (60seg * 30) = 30 minutos ==> tiempo de vida de la sesión
-      }),
-      secret: config.session.secret,
-      resave: false,
-      saveUninitialized: false,
-    })
-    );
-    
-    // Passport
+
+// Session with MongoStore
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl: MONGO_DB,
+      ttl: 60 * 30, // (60seg * 30) = 30 minutos ==> tiempo de vida de la sesión
+    }),
+    secret: config.session.secret,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Passport
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
@@ -65,10 +69,10 @@ const server = app.listen(PORT, (err) => {
   }
   log.connection(
     `Runing server on port ${PORT}, in ${config.environment.env} environment`
-    );
-  });
-  
-  /* Routes */
+  );
+});
+
+/* Routes */
 app.use(indexRouter);
 
 export default app;
