@@ -1,8 +1,9 @@
-import Favorito from '../../models/schemas/favorites.model.js';
+import Favorite from '../../models/schemas/favorites.model.js';
 
-const createFavorite = async(favoriteData) => await Favorito.create(favoriteData);
-const getAllFavorites = async()=> Favorito.find().populate('products');;
-const deleteFavoriteById = async (favoriteId) => await Favorito.findByIdAndDelete(favoriteId);
+
+const createFavorite = async(favoriteData) => await Favorite.create(favoriteData);
+const getAllFavorites = async()=> Favorite.find().populate('products');;
+const deleteFavoriteById = async (favoriteId) => await Favorite.findByIdAndDelete(favoriteId);
 
 export {
     createFavorite,

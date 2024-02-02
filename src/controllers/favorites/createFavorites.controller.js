@@ -2,9 +2,15 @@ import Favorite from "../../models/schemas/favorites.model.js";
 import { createFavorite } from "../../services/database/favorites.services.js";
 
 const addProductFavorite = async (req, res) => {
-  const userId = req.params.fid;
-  const favoriteData = req.body;
+  console.log(req.session)
+  const userId = req.session.user.userId;
 
+  const favoriteData = req.body;
+  console.log("Hola",userId)
+  if (!userId) {
+    res.status(401).json({ message: 'Usuario no autenticado' });
+    return;
+  }
   try {
     // Verifica si el favorito ya existe para evitar duplicados
     const { products } = favoriteData;
