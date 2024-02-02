@@ -4,6 +4,8 @@ import getLogger from '../utils/log.utils.js';
 
 const log = getLogger();
 // Multer
+
+// Persistencia en folders
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let uploadPath = `${__dirname}/public/images`;
@@ -30,8 +32,11 @@ const storage = multer.diskStorage({
   },
 });
 
+// Persistencia en base de datos
+const dbStorage = multer.memoryStorage()
+
 export const uploader = multer({
-  storage,
+  dbStorage,
   onError: (err, next) => {
     log.error(err);
     next();

@@ -13,7 +13,14 @@ const log = getLogger();
  */
 export const updateProducts = async (req, res) => {
   const _id = req.params.pid;
-  const updatedData = req.body;
+  const data = req.body;
+  const thumbnails = [];
+  const files = req.files.forEach((element) => {
+    const fileName = `${Date.now()}-${element.originalname}`;
+    const buffer = element.buffer;
+    thumbnails.push({ name: fileName, data: buffer });
+  });
+  const updatedData = { data, thumbnails };
 
   try {
     const updatedProduct = await updateProduct(_id, updatedData);

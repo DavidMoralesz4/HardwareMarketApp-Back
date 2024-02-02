@@ -5,7 +5,6 @@ const log = getLogger();
 
 export const createProducts = async (req, res) => {
   const productsData = req.body;
-
   const createdProducts = [];
 
   try {
@@ -14,37 +13,53 @@ export const createProducts = async (req, res) => {
       !(
         typeof productsData === 'object' && Object.keys(productsData).length > 0
       )
-    ){
+    ) {
       log.error('No se proporcionaron productos válidos');
       return res.status(400).send('Invalid product');
     }
 
-      //   Validar campos obligatorios para los productos antes de crearlos
-        const { title, description, price, stock, category, condition, trademark } =
-          productsData;
-        if (
-          !title ||
-          !description ||
-          !price ||
-          !stock ||
-          !category ||
-          !condition ||
-          !trademark
-        ) {
-          log.error('createProducts - Error intentando crear el Producto');
-          return res.status(400).send('Required fields are missing');
-        }
+    //   Validar campos obligatorios para los productos antes de crearlos
+    const {
+      title,
+      description,
+      price,
+      stock,
+      category,
+      condition,
+      trademark,
+      // thumbnails,
+    } = productsData;
+    if (
+      !title ||
+      !description ||
+      !price ||
+      !stock ||
+      !category ||
+      !condition ||
+      !trademark
+      // !thumbnails
+    ) {
+      log.error('createProducts - Error intentando crear el Producto');
+      return res.status(203).send('Required fields are missing');
+    }
 
     const processProduct = async (productsData) => {
-      const { title, description, price, stock, category,  condition, trademark } =
-        productsData;
-      const thumbnails = [];
+      const {
+        title,
+        description,
+        price,
+        stock,
+        category,
+        condition,
+        trademark,
+      } = productsData;
 
-      for (const file of req.files) {
-        const filePath = `${req.uploadPath}/${file.filename}`;
-        thumbnails.push(filePath);
-      }
-  console.log('thumbnails:', thumbnails);
+      const thumbnails = [];
+      const files = req.files.forEach((element) => {
+        const fileName = `${Date.now()}-${element.originalname}`;
+        const buffer = element.buffer;
+        thumbnails.push({ name: fileName, data: buffer });
+      });
 
       const newProduct = {
         title,
@@ -53,7 +68,7 @@ export const createProducts = async (req, res) => {
         stock,
         category,
         trademark,
-        thumbnails: thumbnails || [],
+        thumbnails,
         condition,
         owner: req.session.user.userId,
       };
@@ -63,14 +78,14 @@ export const createProducts = async (req, res) => {
     };
 
     await processProduct(productsData);
+    log.info('productos creados: ', createdProducts);
     res.status(201).json({
       status: 'success',
       message: 'Nuevo producto guardado correctamente',
       data: createdProducts,
     });
-    // log.info('productos creados: ', createdProducts);
   } catch (error) {
-    log.error('createProducts - '+ error);
+    log.error('createProducts - ' + error);
     return res.status(500).send('Error de servidor');
   }
 };

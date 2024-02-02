@@ -49,7 +49,16 @@ const productSchema = new mongoose.Schema({
     required: false,
   },
   thumbnails: {
-    type: [String],
+    type: [
+      {
+        name: {
+          type: String,
+        },
+        data: {
+          type: Buffer,
+        },
+      },
+    ],
     required: false,
   },
   deliveryMethod: {

@@ -19,7 +19,7 @@ productsRouter.get('/', getProducts);
 productsRouter.post(
   '/create',
   isActiveSession,
-  uploader.array('thumbnails', 10),
+  uploader.array('thumbnails', 5),
   createProducts
 );
 
@@ -31,6 +31,7 @@ productsRouter.patch(
   '/:pid',
   isActiveSession,
   checkProductOwner,
+  uploader.array('thumbnails', 5),
   updateProducts
 );
 
