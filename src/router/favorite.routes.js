@@ -5,7 +5,7 @@ import { getAllFavorite } from '../controllers/favorites/getFavoritesAll.control
 import { deleteFavorite } from '../controllers/favorites/deleteFavorite.controller.js';
 import { isActiveSession } from '../middlewares/auth.middlewares.js';
 
-
+ 
 const favoriteRouter = Router();
 
 favoriteRouter.post('/add',isActiveSession,addProductFavorite)
