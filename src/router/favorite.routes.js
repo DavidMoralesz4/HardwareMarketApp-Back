@@ -7,7 +7,7 @@ import { deleteFavorite } from '../controllers/favorites/deleteFavorite.controll
 
 const favoriteRouter = Router();
 
-favoriteRouter.post('/add/:fid',addProductFavorite)
+favoriteRouter.post('/add/:fid',addProductFavorite) 
 favoriteRouter.get('/:fid',getAllFavorite );
 favoriteRouter.delete('/:fid/:favid/:pid',deleteFavorite)
 
