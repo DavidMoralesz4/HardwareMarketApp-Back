@@ -19,7 +19,7 @@ export const deleteFavorite = async (req, res) => {
       favoriteId,
       { $pull: { products: productIdToDelete } },
       { new: true } // Devuelve el documento actualizado
-    );
+    ); 
 
     res.json({ message: 'Producto eliminado del favorito exitosamente.', updatedFavorite });
 
