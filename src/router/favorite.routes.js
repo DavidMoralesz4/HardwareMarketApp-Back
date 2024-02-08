@@ -12,4 +12,4 @@ favoriteRouter.post('/add',isActiveSession,addProductFavorite)
 favoriteRouter.get('/:fid',getAllFavorite );
 favoriteRouter.delete('/:favid/:pid',isActiveSession,deleteFavorite)
 
-export default favoriteRouter;
+export default favoriteRouter; 
