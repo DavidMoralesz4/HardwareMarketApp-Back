@@ -91,11 +91,35 @@ export const createCartDTO = (products) => {
     id: cartItem.product._id,
     title: cartItem.product.title,
     description: cartItem.product.description,
-    price: cartItem.product.price,
-    status: cartItem.product.status,
+    trademark: cartItem.product.trademark,
+    price: parseFloat(cartItem.product.price),
+    condition: cartItem.product.condition,
+    deliveryMethod: cartItem.product.deliveryMethod,
     quantity: cartItem.quantity,
-    total: cartItem.product.price * cartItem.quantity,
+    total: parseFloat(cartItem.product.price * cartItem.quantity),
   }));
 
   return cartDTO;
 };
+
+export const formatTotalAmount = (totalAmount) => {
+  let number = parseFloat(totalAmount.toString().replace(',', '.'));
+
+  // Verificar si el número es un float válido
+  if (isNaN(number)) {
+    throw new Error('El valor proporcionado no es un número válido.');
+  }
+
+  // Redondear el número a dos decimales y convertirlo a string
+  let formatedNumber = number.toFixed(2);
+
+  // Separar las partes enteras y decimales del número
+  let parts = formatedNumber.split('.');
+
+  // Agregar separadores de miles
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+  // Unir las partes con coma como separador decimal
+  return parts.join(',');
+};
+

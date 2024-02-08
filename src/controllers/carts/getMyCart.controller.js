@@ -1,7 +1,7 @@
 import { getCartByUserId } from '../../services/database/cart.services.js';
 import {
   createCartDTO,
-  processProducts,
+  formatTotalAmount,
   separateProductsByStock,
 } from '../../utils/cart.utils.js';
 import getLogger from '../../utils/log.utils.js';
@@ -10,7 +10,7 @@ const log = getLogger();
 
 export const getMyCart = async (req, res) => {
   const userId = req.params.uid;
-  // console.log(userId);
+
   try {
     const cart = await getCartByUserId(userId);
     if (!cart) {
@@ -32,8 +32,6 @@ export const getMyCart = async (req, res) => {
     // Separar los productos por disponibilidad (stock)
     const { productsToProcess, productsNotProcessed } =
       await separateProductsByStock(productsByOwner);
-    const availableProducts = processProducts(productsToProcess);
-    const notAvailableProducts = processProducts(productsNotProcessed);
 
     const availableProductsDTO = {};
     for (const ownerId in productsByOwner) {
@@ -44,7 +42,7 @@ export const getMyCart = async (req, res) => {
         const totalAmount = products.reduce((acc, curr) => acc + curr.total, 0);
         availableProductsDTO[owner] = {
           products: products,
-          totalAmount: totalAmount,
+          totalAmount: formatTotalAmount(totalAmount) ,
         };
       }
     }
@@ -59,7 +57,6 @@ export const getMyCart = async (req, res) => {
       }
     }
 
-    console.log('cart2: ', productsByOwner);
     res.status(200).json({
       status: 'success',
       message: 'Carrito del usuario encontrado satisfactoriamente',
