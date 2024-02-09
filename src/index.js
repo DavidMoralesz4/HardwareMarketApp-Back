@@ -1,9 +1,11 @@
+'use strict'
 import 'dotenv/config';
 import config from './config/config.js';
 import express, { json, urlencoded } from 'express';
 import __dirname from './utils.js';
 import cors from 'cors';
 import getLogger from './utils/log.utils.js';
+import { helmetConfig } from './config/helmet.config.js';
 
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
@@ -21,6 +23,9 @@ import morgan from 'morgan';
 const app = express();
 const PORT = process.env.PORT || config.server.port;
 const MONGO_DB = config.db.cs;
+
+// Helmet
+helmetConfig(app);
 
 const log = getLogger();
 

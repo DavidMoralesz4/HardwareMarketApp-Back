@@ -1,12 +1,11 @@
 import { transporter } from "../../config/mailer.js";
-import config from "../../config/config.js";
 
-const sendEmail = async (fromEmail, fromUser, message) => {
+const sendEmail = async (fromEmail, toEmail, subject, message) => {
     await transporter.sendMail({
-        from: `"${fromUser}" <${fromEmail}>`,
-        to: config.mailer.email,
-        subject: `New email from ${fromUser} in HardwareMarketApp`,
-        text: `${message}\nReply to ${fromEmail} (${fromUser}).`
+        from: fromEmail,
+        to: toEmail,
+        subject: subject,
+        text: message,
     })
 }
 
