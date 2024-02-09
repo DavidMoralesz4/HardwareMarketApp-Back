@@ -3,6 +3,7 @@ import {
   getCarts,
   getMyCart,
   updateCart,
+  deleteProdOfCart
 } from '../controllers/carts/indexCart.controller.js';
 import { checkRole } from '../middlewares/auth.middlewares.js';
 
@@ -31,9 +32,7 @@ cartsRouter.get('/user/:uid', checkRole('user'), getMyCart);
 cartsRouter.delete(
   '/:cid/products/:pid',
   checkRole('user', 'admin'),
-  (req, res) => {
-    // TODO: deleteProdOfCart controller
-  }
+  deleteProdOfCart
 );
 
 // Finalizar el proceso de compra del carrito
