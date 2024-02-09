@@ -57,17 +57,20 @@ app.use(passport.session());
 /* Morgan */
 app.use(morgan('dev'));
 
-/* Server HTTP */
-const server = app.listen(PORT, (err) => {
-  db;
-  if (err) {
-    log.error('Connection error: ', err.message);
-    return;
-  }
-  log.connection(
-    `Runing server on port ${PORT}, in ${config.environment.env} environment`
-  );
-});
+// Server http 
+(() => {
+  const server = app.listen(PORT, (err) => {
+    db;
+    if (err) {
+      log.error('Connection error: ', err.message);
+      return;
+    }
+    log.connection(
+      `Runing server on port ${PORT}, in ${config.environment.env} environment`
+    );
+  });
+})();
+
 
 /* Routes */
 app.use(indexRouter);
