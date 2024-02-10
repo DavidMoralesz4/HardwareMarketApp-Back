@@ -17,7 +17,7 @@ productsRouter.get('/', getProducts);
 
 // Crear un nuevo producto
 productsRouter.post(
-  '/create',
+  '/',
   isActiveSession,
   uploader.array('thumbnails', 5),
   createProducts

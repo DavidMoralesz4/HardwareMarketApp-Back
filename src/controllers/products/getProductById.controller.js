@@ -11,7 +11,6 @@ const log = getLogger();
  */
 export const getProductById = async (req, res) => {
   const _id = req.params.pid;
-  console.log(_id)
 
   try {
     const product = await getProductsById(_id);
