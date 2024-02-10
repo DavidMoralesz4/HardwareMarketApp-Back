@@ -13,6 +13,8 @@ import cookieParser from 'cookie-parser';
 
 import indexRouter from './router/index.routes.js';
 import db from './config/dbConnection.js';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 
 /* Dev */
 import morgan from 'morgan';
@@ -30,6 +32,21 @@ app.use(urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
 app.use(cookieParser());
 app.use(cors());
+
+// Swagger
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.1',
+    info: {
+      title: 'Documentación de API para Hardware Market',
+      description:
+        'En esta documentación se encuentran las rutas a todos los enpoints, con sus respectivos verbos, como asi también en formato de peticion que espera la API y el formato de respuesta.',
+    },
+  },
+  apis: [` ${__dirname}/docs/**/*.yaml`],
+};
+
+const specs = swaggerJSDoc(swaggerOptions);
 
 // Session with MongoStore
 app.use(
@@ -66,5 +83,5 @@ const server = app.listen(PORT, (err) => {
 
 /* Routes */
 app.use(indexRouter);
-
+app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 export default app;
