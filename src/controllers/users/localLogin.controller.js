@@ -59,8 +59,7 @@ export const userLogin = async (req, res) => {
       if (err) {
         log.fatal('userLogin - Error al guardar la sessión - ' + err);
         res.status(500).json({
-          message: 'Error al guardar la sesión',
-          error: err,
+          message: 'Error interno del servidor',
         });
       }
 
@@ -74,9 +73,8 @@ export const userLogin = async (req, res) => {
     });
   } catch (error) {
     log.fatal('userLogin: ' + error);
-    return res.status(500).json({
-      message: 'Error al iniciar session',
-      error: error,
+    return res.status(500).send({
+      message: 'Error interno del servidor',
     });
   }
 };
