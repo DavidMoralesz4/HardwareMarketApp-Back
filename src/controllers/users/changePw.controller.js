@@ -14,7 +14,7 @@ export const changePw = async(req,res) => {
     }
    
     const hashedPassword = await bcrypt.hash(hashedPassword, 10);
-    const updatedPassword = updatePasswordByEmail();
+    const updatedPassword = updatePasswordByEmail(userEmail,hashedPassword);
       
     if(!updatedPassword) {
        return res.status(404).json({message:'Error updating password, check all fields and try again'})
