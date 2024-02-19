@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { updatePasswordByEmail } from '../../services/database/users.services.js';
-=======
-import { updatePasswordByEmail } from '../../services/database/users.services';
->>>>>>> develop
 import bcrypt from 'bcrypt';
 
 export const changePw = async (req, res) => {
