@@ -30,7 +30,7 @@ const checkRole =
     } else {
       // El usuario no tiene el rol adecuado, devolver un mensaje de error o redirigir a una página de acceso denegado
       log.error('Acceso denegado. El usuario no tiene el rol adecuado');
-      res.status(403).send({ message: 'Acceso denegado' });
+      res.status(203).send({ message: 'Acceso denegado' });
     }
   };
 
