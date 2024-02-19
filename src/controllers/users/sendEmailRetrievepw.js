@@ -9,7 +9,7 @@ export const sendEmailPw = async(req,res) => {
 
     if(!userData) return res.status(404).json({message:'Email not found in database'});
     
-    const updatePwLink = `http://localhost/update-user-pw`;
+    const updatePwLink = `http://localhost/view-change-pw`;
 
     const subject = 'Retrieve your password';
     const message = `Retrieve your HardwareMarket in the following link: ${updatePwLink}`;
