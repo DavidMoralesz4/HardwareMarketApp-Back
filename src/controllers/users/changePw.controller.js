@@ -8,7 +8,7 @@ export const changePw = async(req,res) => {
     if(!userEmail || newPassword || confirm){
       return res.status(400).json({message:'All fields are required'});
     }
-
+    //
     if(newPassword !== confirm){
       return res.status(400).json({message:'Passwords must be equal'});
     }
