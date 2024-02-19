@@ -1,7 +1,7 @@
 import { updatePasswordByEmail } from "../../services/database/users.services"
 import bcrypt from 'bcrypt';
 
-export const sendEmailPw = async(req,res) => {
+export const changePw = async(req,res) => {
   try {
     const {userEmail, newPassword, confirm} = req.body;
     
