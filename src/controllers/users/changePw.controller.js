@@ -1,29 +1,32 @@
-import { updatePasswordByEmail } from "../../services/database/users.services.js"
+import { updatePasswordByEmail } from '../../services/database/users.services.js';
 import bcrypt from 'bcrypt';
 
-export const changePw = async(req,res) => {
+export const changePw = async (req, res) => {
   try {
-    const {userEmail, newPassword, confirm} = req.body;
-    
-    if(!userEmail || newPassword || confirm){
-      return res.status(400).json({message:'All fields are required'});
+    const { userEmail, newPassword, confirm } = req.body;
+
+    if (!userEmail || newPassword || confirm) {
+      return res.status(400).json({ message: 'All fields are required' });
     }
     //
-    if(newPassword !== confirm){
-      return res.status(400).json({message:'Passwords must be equal'});
+    if (newPassword !== confirm) {
+      return res.status(400).json({ message: 'Passwords must be equal' });
     }
-   
+
     const hashedPassword = await bcrypt.hash(hashedPassword, 10);
-    const updatedPassword = updatePasswordByEmail(userEmail,hashedPassword);
-      
-    if(!updatedPassword) {
-       return res.status(404).json({message:'Error updating password, check all fields and try again'})
+    const updatedPassword = updatePasswordByEmail(userEmail, hashedPassword);
+
+    if (!updatedPassword) {
+      return res
+        .status(404)
+        .json({
+          message: 'Error updating password, check all fields and try again',
+        });
     }
-    
-    res.status(200).json({message: 'Password updated succesfully'});
+
+    res.status(200).json({ message: 'Password updated succesfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+    console.error(`Error updating user password ${err}`);
   }
-  catch(err) {
-    res.status(500).json({message:'Internal server error'});
-    console.error(`Error updating user password ${err}`)
-  }
-}
+};
