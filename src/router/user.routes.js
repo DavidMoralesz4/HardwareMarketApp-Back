@@ -13,6 +13,8 @@ userRouter.post("/contact", contactUs)
 
 userRouter.post('/send-retrieve-pw',sendEmailPw);
 
-userRouter.get('/change-user-pw',changePw);
+userRouter.get('/update-user-pw')
+
+userRouter.post('/change-user-pw',changePw);
 
 export default userRouter;
