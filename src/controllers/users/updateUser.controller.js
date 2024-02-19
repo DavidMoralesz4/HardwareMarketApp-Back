@@ -8,7 +8,7 @@ const log = getLogger();
  * updateProduct - Actualiza un prooducto a partir de un pid
  * @param {id} req.session
  * @param {updatedData} req.body
- * @returns {updatedUser}
+ * @returns {updateUser}
  * @param {data} res
  */
 export const updateUser = async (req, res) => {
