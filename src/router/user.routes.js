@@ -12,7 +12,7 @@ userRouter.patch('/update', updateUser)
 
 userRouter.post("/contact", contactUs)
 
-userRouter.post('/send-email-pw',sendEmailPw);
+userRouter.post('/send-email-pw', sendEmailPw);
 
 userRouter.get('/view-change-pw');
 
