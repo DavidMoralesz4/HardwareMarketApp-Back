@@ -1,10 +1,12 @@
 import getLogger from '../../utils/log.utils.js';
 import { createProduct } from '../../services/database/product.services.js';
+import { uploadFile } from '../../utils/uploadFile.utils.js';
 
 const log = getLogger();
 
 export const createProducts = async (req, res) => {
   const productsData = req.body;
+
   const createdProducts = [];
 
   try {
@@ -19,16 +21,8 @@ export const createProducts = async (req, res) => {
     }
 
     //   Validar campos obligatorios para los productos antes de crearlos
-    const {
-      title,
-      description,
-      price,
-      stock,
-      category,
-      condition,
-      trademark,
-      // thumbnails,
-    } = productsData;
+    const { title, description, price, stock, category, condition, trademark } =
+      productsData;
     if (
       !title ||
       !description ||
@@ -37,7 +31,6 @@ export const createProducts = async (req, res) => {
       !category ||
       !condition ||
       !trademark
-      // !thumbnails
     ) {
       log.error('createProducts - Error intentando crear el Producto');
       return res.status(203).send('Required fields are missing');
@@ -55,11 +48,14 @@ export const createProducts = async (req, res) => {
       } = productsData;
 
       const thumbnails = [];
-      const files = req.files.forEach((element) => {
-        const fileName = `${Date.now()}-${element.originalname}`;
-        const buffer = element.buffer;
-        thumbnails.push({ name: fileName, data: buffer });
-      });
+
+      const images = req.files.thumbnails;
+      if (images && images.length > 0) {
+        for (const file of images) {
+          const { downloadURL } = await uploadFile(file);
+          thumbnails.push(downloadURL);
+        }
+      }
 
       const newProduct = {
         title,
@@ -78,7 +74,6 @@ export const createProducts = async (req, res) => {
     };
 
     await processProduct(productsData);
-    log.info('productos creados: ', createdProducts);
     res.status(201).json({
       status: 'success',
       message: 'Nuevo producto guardado correctamente',
