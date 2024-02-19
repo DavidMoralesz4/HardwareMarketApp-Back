@@ -6,11 +6,11 @@ export const changePw = async(req,res) => {
     const {userEmail, newPassword, confirm} = req.body;
     
     if(!userEmail || newPassword || confirm){
-      return res.status(400).json({message:'All fields are required'})
+      return res.status(400).json({message:'All fields are required'});
     }
 
     if(newPassword !== confirm){
-      return res.status(400).json({message:'Passwords must be equal'})
+      return res.status(400).json({message:'Passwords must be equal'});
     }
    
     const hashedPassword = await bcrypt.hash(hashedPassword, 10);
