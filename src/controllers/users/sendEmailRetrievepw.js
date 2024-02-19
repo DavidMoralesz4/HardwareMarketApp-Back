@@ -1,6 +1,6 @@
-import { getUserByEmail } from "../../services/database/users.services"
-import { sendEmail } from "../../services/mailer/mailer.services";
-import config from "../../config/config";
+import { getUserByEmail } from "../../services/database/users.services.js"
+import { sendEmail } from "../../services/mailer/mailer.services.js";
+import config from "../../config/config.js";
 
 export const sendEmailPw = async(req,res) => {
   try {
