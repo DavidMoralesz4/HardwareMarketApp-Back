@@ -18,7 +18,7 @@ cartsRouter.get('/:cid', checkRole('admin'), (req, res) => {
 });
 
 // Actualizar el carrito con nuevos productos y/o cantidad de ejemplares de un producto en un carrito
-cartsRouter.put('/:cid', checkRole('user'), updateCart);
+cartsRouter.put('/:cid', updateCart); //* quito el middleware para hacerun prueba con el front
 
 // Eliminar un carrito
 cartsRouter.delete('/:cid', checkRole('admin'), (req, res) => {
