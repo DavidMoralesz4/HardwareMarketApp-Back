@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { uploader } from '../middlewares/saveFiles.middlewares.js';
 import {
   createProducts,
   deleteProducts,
@@ -7,7 +8,6 @@ import {
   updateProducts,
 } from '../controllers/products/indexProduct.controller.js';
 import { isActiveSession } from '../middlewares/auth.middlewares.js';
-import { uploader } from '../middlewares/saveFiles.middlewares.js';
 import { checkProductOwner } from '../middlewares/products.middlewares.js';
 
 const productsRouter = Router();
@@ -17,9 +17,9 @@ productsRouter.get('/', getProducts);
 
 // Crear un nuevo producto
 productsRouter.post(
-  '/create',
+  '/',
   isActiveSession,
-  uploader.array('thumbnails', 5),
+  uploader.fields([{ name: 'thumbnails', maxCount: 5 }]),
   createProducts
 );
 
@@ -31,7 +31,7 @@ productsRouter.patch(
   '/:pid',
   isActiveSession,
   checkProductOwner,
-  uploader.array('thumbnails', 5),
+  uploader.fields([{ name: 'thumbnails', maxCount: 5 }]),
   updateProducts
 );
 

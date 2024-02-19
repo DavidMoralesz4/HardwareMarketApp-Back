@@ -12,7 +12,7 @@ const isActiveSession = (req, res, next) => {
     next();
   } else {
     log.warn('isActiveSession - El user no está logueado');
-    res.send({ message: 'Unauthorized' });
+    return res.send({ message: 'Unauthorized' });
   }
 };
 

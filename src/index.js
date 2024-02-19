@@ -45,7 +45,7 @@ const swaggerOptions = {
     info: {
       title: 'Documentación de API para Hardware Market',
       description:
-        'En esta documentación se encuentran las rutas a todos los enpoints, con sus respectivos verbos, como asi también en formato de peticion que espera la API y el formato de respuesta.',
+        'En esta documentación se encuentran las rutas a todos los endpoints, con sus respectivos verbos, como asi también el formato de petición que espera la API y el formato de respuesta.',
     },
   },
   apis: [` ${__dirname}/docs/**/*.yaml`],

@@ -9,6 +9,6 @@ export const userLogout = (req, res) => {
       return res.status(500).send({ error: 'Internal Server Error' });
     }
     log.info('userLogout - Sesion finalizada');
-    res.status(200).send('Sesion finalizada');
+    res.status(200).send({ message: 'Sesion finalizada' });
   });
 };

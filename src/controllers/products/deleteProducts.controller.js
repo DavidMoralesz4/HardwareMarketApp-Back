@@ -20,6 +20,9 @@ export const deleteProducts = async (req, res) => {
     const ownerId = product.owner;
     const { email } = await getUserById(ownerId);
 
+    if (!product) {
+      return res.status(404).send({ message: 'Producto no encontrado' });
+    }
     await deleteProduct(_id);
 
     //   TODO: Crear una función para enviar un email al propietario indicando que el producto fue eliminado de la base de datos

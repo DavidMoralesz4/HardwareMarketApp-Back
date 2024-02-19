@@ -1,5 +1,6 @@
 import { updateProduct } from '../../services/database/product.services.js';
 import getLogger from '../../utils/log.utils.js';
+import { uploadFile } from '../../utils/uploadFile.utils.js';
 
 const log = getLogger();
 
@@ -15,14 +16,16 @@ export const updateProducts = async (req, res) => {
   const _id = req.params.pid;
   const data = req.body;
   const thumbnails = [];
-  const files = req.files.forEach((element) => {
-    const fileName = `${Date.now()}-${element.originalname}`;
-    const buffer = element.buffer;
-    thumbnails.push({ name: fileName, data: buffer });
-  });
+  const images = req.files.thumbnails;
   const updatedData = { data, thumbnails };
 
   try {
+    if (images && images.length > 0) {
+      for (const file of images) {
+        const { downloadURL } = await uploadFile(file);
+        thumbnails.push(downloadURL);
+      }
+    }
     const updatedProduct = await updateProduct(_id, updatedData);
 
     log.info('Producto actualizado correctamente');

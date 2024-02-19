@@ -15,6 +15,11 @@ export const userRegister = async (req, res) => {
     // log.info('data: ', data);
     const user = await getUserByEmail(data.email);
     if (user) {
+      log.info('User already registered');
+      return res.status(200).send({
+        message: 'Usuario registrado. inicie sesión para continuar...',
+      });
+    } else {
       return res.status(409).send({ message: 'User already exists'});
     } 
     else {
@@ -25,6 +30,7 @@ export const userRegister = async (req, res) => {
         age: data.age,
         password: createHash(data.password),
       });
+      log.info('Nuevo usuario registrado');
 
       // Send welcome email to the user
       if(userCreated) {

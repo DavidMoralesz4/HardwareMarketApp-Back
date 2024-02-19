@@ -1,0 +1,393 @@
+paths:
+  /v1/api/products/:
+    get:
+      summary: Obtiene todos los productos paginados
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Los productos fueron obtenidos satisfactoriamente de la base de datos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                $ref: '#components/schemas/getProductsPaginated'
+        '500':
+          description: Error interno del servidor
+    post:
+      summary: Crea un nuevo producto. Esta ruta requiere que el usuario tenga una sesión activa.
+      tags:
+        - Products
+      middlewares:
+        - isActiveSession # Verifica si la sesión del usuario está activa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              items:
+              $ref: '#components/requestBodies/createProduct'
+      responses:
+        '201':
+          description: Nuevo producto guardado correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                $ref: '#components/schemas/Products'
+        '400':
+          description: No se proporcionó un producto válido
+        '203':
+          description: Faltan campos requeridos
+        '500':
+          description: Error interno del servidor
+  # /v1/api/products/{pid}:
+  #   get:
+  #     summary: Obtiene un producto a partir de su id
+  #     tags:
+  #       - Products
+  #     parameters:
+  #       - name: pid
+  #         in: path
+  #         required: true
+  #         description: Id del producto que desea solicitar
+  #     responses:
+  #       '200':
+  #         description: Producto encontrado
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #               $ref: '#components/schemas/Products'
+  #       '404':
+  #         description: Producto no encontrado - probablemente error en el id o producto eliminado de la base de datos
+  #       '500':
+  #         description: Error interno del servidor
+  #   patch:
+  #     summary: Actualiza un producto a partir de su id. Esta ruta requiere que el usuario tenga una sesión activa. Además, verifica si el usuario es propietario del producto. ('admin' modifica cualquier producto, 'user' modifica sólo sus productos)
+  #     tags:
+  #       - Products
+  #     security:
+  #       - isActiveSession: true # Verifica si la sesión del usuario está activa
+  #       - checkProductOwner: true # Verifica si el usuario es propietario del producto
+  #     parameters:
+  #       - name: pid
+  #         in: path
+  #         required: true
+  #         description: Id del producto que desea actualizar
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: array
+  #             $ref: '#components/requestBodies/updateProduct'
+  #       '200':
+  #         description: Producto actualizado correctamente
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #               $ref: '#components/schemas/Products'
+  #       '500':
+  #         description: Error interno del servidor
+  #   delete:
+  #     summary: Elimina un producto a partir de su id. Esta ruta requiere que el usuario tenga una sesión activa. Además, verifica si el usuario es propietario del producto. ('admin' elimina cualquier producto, 'user' elimina sólo sus productos)
+  #     tags:
+  #       - Products
+  #     security:
+  #       - isActiveSession: true # Verifica si la sesión del usuario está activa
+  #       - checkProductOwner: true # Verifica si el usuario es propietario del producto
+  #     parameters:
+  #       - name: pid
+  #         in: path
+  #         required: true
+  #         description: Id del producto que desea eliminar
+  #     responses:
+  #       '200':
+  #         description: El producto ha sido eliminado correctamente
+  #         content:
+  #           application/json:
+  #             schema:
+  #               items:
+  #               $ref: '#components/schemas/Products'
+
+  #       '404':
+  #         description: Producto no encontrado, probablemente error en el id
+  #       '500':
+  #         description: Error interno del servidor
+
+components:
+  schemas:
+    getProductsPaginated:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Estado de la respuesta
+        message:
+          type: string
+          description: Mensaje aclaratorio de la respuesta
+        data:
+          type: object
+          properties:
+          - type: object
+            properties:
+              _id:
+                type: string
+                description: Id autogenerado por mongoDB
+              title:
+                type: string
+                description: Nombre del producto
+              description:
+                type: string
+                description: Descripción del producto
+              trademark:
+                type: string
+                description: Marca del producto
+              price:
+                type: number
+                description: Precio del producto
+              status:
+                type: boolean
+                description: Indica si el producto se encuentra disponible, puede modificarse en base a la falta de stock o que esté pausado por algún motivo
+              stock:
+                type: number
+                description: Cantidad de stock del producto
+              category:
+                type: string
+                description: Categoría del producto
+              condition:
+                type: string
+                description: Indica si el producto es nuevo o usado
+              score:
+                type: number
+                description: Es la valoración que tiene el producto por parte de los compradores
+              opinions:
+                type: array
+                description: Opiniones sobre el producto por parte de los compradores
+              thumbnails:
+                type: array
+                description: Imágenes del producto
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: nombre del archivo de imagen
+                    data:
+                      type: string
+                      description: Imagen en formato Buffer
+              deliveryMethod:
+                type: array
+                description: Array de Strings que indica los tipos de entrega disponible del producto
+                items:
+                  type: string
+              lastModifyDate:
+                type: date-time
+                description: Fecha de última modificación del producto
+              owner:
+                type: String
+                description: Id del creador del producto
+        totalPages:
+          type: number
+          description: Número total de páginas
+        page:
+          type: number
+          description: Número de página actual
+        prevPage:
+          type: number
+          description: Número de página anterior
+        nextPage:
+          type: number
+          description: Número de página siguiente
+        hasPrevPage:
+          type: boolean
+          description: Indica si existe página previa
+        hasNextPage:
+          type: boolean
+          description: Indica si existe página siguiente
+        prevLink:
+          type: string
+          description: Link a la página anterior si la hay, de lo contrario 'null'
+        nextLink:
+          type: string
+          description: Link a la página siguiente si la hay, de lo contrario 'null'
+      example:
+        status: 'success'
+        message: 'Current user'
+        data:
+          {
+            payload:
+              [
+                {
+                  _id: '64e3e242f5ea3a37f8190375',
+                  title: 'Monitor Led',
+                  description: '17inch FHD 1920 x 1080',
+                  trademark: 'Samsung',
+                  price: 150000,
+                  status: true,
+                  stock: 25,
+                  category: 'screen',
+                  condition: 'nuevo',
+                  score: 3,
+                  opinions:
+                    [
+                      'lorem ipsum dolor sit amet',
+                      'lorem ipsum dolor sit amet',
+                      'lorem ipsum dolor sit amet',
+                    ],
+                  thumbnails:
+                    [
+                      { name: 'monitor_img.png', data: Buffer },
+                      { name: 'monitor_dim.png', data: Buffer },
+                    ],
+                  deliveryMethod:
+                    ['freeShipping', 'costShipping', 'homePickup'],
+                  lastModifyDate: 2023-08-15T14:46:21.999+00:00,
+                  owner: '64df91cecaf5d075245d1d68',
+                },
+              ],
+          }
+        totalPages: 2
+        page: 1
+        prevPage: null
+        nextPage: 2
+        hasPrevPage: false
+        hasNextPage: true
+        prevLink: null
+        nextLink: '/products?page=2&limit=10'
+    createProduct:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Estado de la respuesta
+        message:
+          type: string
+          description: Mensaje aclaratorio de la respuesta
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        trademark:
+          type: string
+          description: Marca del producto
+        price:
+          type: number
+          description: Precio del producto
+        stock:
+          type: number
+          description: Cantidad de stock del producto
+        category:
+          type: string,
+          description: Categoría del producto
+        condition:
+          type: string
+          description: Indica si es un producto nuevo o usado
+        thumbnails:
+          type: array
+          description: Imágenes del producto
+        deliveryMethod:
+          type: array
+          description: Array de Strings que indica los tipos de entrega disponible del producto
+      example:
+        title: Calculadora científica
+        description: Ecal auto power off
+        trademark: Casio
+        price: 20000
+        stock: 2
+        category: calculadoras
+        condition: usado
+        thumbnails: [{ name: 'calculadora.png', data: Buffer }]
+        deliveryMethod: ['costShipping', 'homePickup']
+          
+  requestBodies:
+    createProduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        trademark:
+          type: string
+          description: Marca del producto
+        price:
+          type: number
+          description: Precio del producto
+        stock:
+          type: number
+          description: Cantidad de stock del producto
+        category:
+          type: string,
+          description: Categoría del producto
+        condition:
+          type: string
+          description: Indica si es un producto nuevo o usado
+        thumbnails:
+          type: array
+          description: Imágenes del producto
+        deliveryMethod:
+          type: array
+          description: Array de Strings que indica los tipos de entrega disponible del producto
+      example:
+        title: Calculadora científica
+        description: Ecal auto power off
+        trademark: Casio
+        price: 20000
+        stock: 2
+        category: calculadoras
+        condition: usado
+        thumbnails: [{ name: 'calculadora.png', data: Buffer }]
+        deliveryMethod: ['costShipping', 'homePickup']
+    updateProduct:
+      type: Object
+      properties:
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        trademark:
+          type: String
+          description: Marca del producto
+        price:
+          type: Number
+          description: Precio del producto
+        stock:
+          type: Number
+          description: Cantidad de stock del producto
+        category:
+          type: String,
+          description: Categoría del producto
+        condition:
+          type: String
+          description: Indica si es un producto nuevo o usado
+        thumbnails:
+          type: Array
+          description: Imágenes del producto
+        deliveryMethod:
+          type: Array
+          description: Array de Strings que indica los tipos de entrega disponible del producto
+      example:
+        title: Monitor Led curvo
+        price: 200000
+        stock: 32
+    deleteProduct:
+      type: Object
+      properties:
+        message:
+          type: String
+          description: Mensaje aclaratorio de la respuesta
+      example:
+        message: 'Product deleted successfully'

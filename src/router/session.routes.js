@@ -8,6 +8,7 @@ import {
   userLogout,
 } from '../controllers/users/index.controller.js';
 import { verifyRequiredFields } from '../middlewares/session.middlewares.js';
+import { isActiveSession } from '../middlewares/auth.middlewares.js';
 
 const sessionRouter = Router();
 
@@ -24,10 +25,7 @@ sessionRouter.get('/', (req, res) => {
 sessionRouter.post('/register', verifyRequiredFields, userRegister);
 // ================================================================
 // Login de usuario mediante app
-sessionRouter.post(
-  '/login',
-  userLogin
-);
+sessionRouter.post('/login', userLogin);
 
 // ================================================================
 // Login de usuario mediante Google
@@ -49,10 +47,10 @@ sessionRouter.get('/facebook', (req, res) => {
 
 // ================================================================
 // Usuario logueado actualmente
-sessionRouter.get('/current', currentUser);
+sessionRouter.get('/current', isActiveSession, currentUser);
 
 // ================================================================
 // Cerrar sesión de usuario
-sessionRouter.get('/logout', userLogout);
+sessionRouter.get('/logout', isActiveSession, userLogout);
 
 export default sessionRouter;
