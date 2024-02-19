@@ -20,9 +20,6 @@ export const userRegister = async (req, res) => {
         message: 'Usuario registrado. inicie sesión para continuar...',
       });
     } else {
-      return res.status(409).send({ message: 'User already exists'});
-    } 
-    else {
       const userCreated = await createUser({
         first_name: data.first_name,
         last_name: data.last_name,
@@ -33,13 +30,18 @@ export const userRegister = async (req, res) => {
       log.info('Nuevo usuario registrado');
 
       // Send welcome email to the user
-      if(userCreated) {
-        let subject = 'Welcome to Hardware Market'
-        let message =  `Welcome ${userCreated.first_name} ${userCreated.last_name}, you are succesfully join to our site`
-        
-        await sendEmail(config.mailer.email, userCreated.email, subject, message);
+      if (userCreated) {
+        let subject = 'Welcome to Hardware Market';
+        let message = `Welcome ${userCreated.first_name} ${userCreated.last_name}, you are succesfully join to our site`;
+
+        await sendEmail(
+          config.mailer.email,
+          userCreated.email,
+          subject,
+          message
+        );
       }
-      
+
       res.status(201).json({
         status: 'success',
         message: 'Registro de usuario exitoso. Inicia sesión para continuar.',

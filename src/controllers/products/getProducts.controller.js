@@ -70,7 +70,7 @@ export const getProducts = async (req, res) => {
       hasNextPage,
       hasPrevPage,
     } = await getAllProductsPaginated(options, filter, sortOptions);
-
+    console.log('--> docs: ', docs)
     //   Enlaces a pagina previa y siguiente
     const prevLink = hasPrevPage
       ? `/products?page=${prevPage}&limit=${limit}`
