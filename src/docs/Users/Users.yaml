@@ -1,0 +1,320 @@
+paths:
+  /v1/api/sessions/register/:
+    post:
+      summary: Registra un nuevo usuario. Cuenta con validación de campos requeridos.
+      tags:
+        - Sessions
+      middleware:
+        - verifyRequiredFields: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              items:
+              $ref: '#components/requestBodies/RegisterUser'
+      responses:
+        '200':
+          description: Usuario registrado. inicie sesión para continuar...
+        '201':
+          description: Registro de usuario exitoso. Inicia sesión para continuar.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                $ref: '#components/schemas/responses/Register'
+        '500':
+          description: Error interno del servidor
+  /v1/api/sessions/login/:
+    post:
+      summary: Login local de usuario. El usuario debe loguearse a partir de un email y una password. La sesión tiene pre configurado un tiempo de expiración luego del cual la misma se cierra automáticamente por seguridad.
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              items:
+              $ref: '#components/requestBodies/LocalLogin'
+      responses:
+        '200':
+          description: Inicio de sesión exitoso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                $ref: '#components/schemas/responses/LocalLogin'
+        '203':
+          description: Puede deberse a un email incorrecto o bien una Password incorrecta
+        '500':
+          description: Error interno del servidor
+  /v1/api/sessions/current/:
+    get:
+      summary: Obtiene el usuario logeado actual a partir de la 'req.session'. Puede utilizarse por ejemplo para armar un Dashboard de usuario.
+      tags:
+        - Sessions
+      middleware:
+        - isActiveSession: []
+      responses:
+        '200':
+          description: Current user active (en caso de no haber una sesión activa la respuesta será 'null')
+          content:
+            application/json:
+              schema:
+                items:
+                $ref: '#components/schemas/responses/CurrentUser'
+        '500':
+          description: Error interno del servidor
+  /v1/api/sessions/logout/:
+    get:
+      summary: Cierra la sesión de usuario.
+      tags:
+        - Sessions
+      middleware:
+        - isActiveSession: []
+      responses:
+        '200':
+          description: Sesión finalizada (Si la respuesta es 'Unauthorized' es porque no había una sesión activa que cerrar)
+          content:
+            application/json:
+              schema:
+                items:
+                $ref: '#components/schemas/responses/Logout'
+
+        '500':
+          description: Error interno del servidor
+
+components:
+  schemas: # User Model
+    responses:
+      Register:
+        type: object
+        properties:
+          status:
+            type: String
+            description: Estado de la respuesta
+          message:
+            type: String
+            description: Mensaje aclaratorio de la respuesta
+          user:
+            type: object
+            properties:
+              first_name:
+                type: String
+                description: Nombre real del usuario
+              last_name:
+                type: String
+                description: Apellido del usuario
+              email:
+                type: String
+                description: Email del usuario
+              age:
+                type: Number
+                description: Edad del usuario
+              password:
+                type: String
+                description: Password del usuario hasheada.
+              role:
+                type: String
+                description: Rol del usuario
+              comments:
+                type: Array
+                description: Array de strings vacío donde se almacenarán las opiniones de los usuarios con los que interactúa.
+              last_connection:
+                type: Date
+                description: Fecha de última conexión del usuario, Puede ser utilizado por ejemplo para desabilitar al usuario luego de cierto tiempo de inactividad en la plataforma (6 meses / 1 año).
+              enabled:
+                type: Boolean
+                description: Indica si el usuario está habilitado en la plataforma, puede ser utilizado en caso de necesitar desabilitar al mismo ya sea por inactividad, actividad inapropiada, actividad que infrinja los terminos y condiciones de la plataforma, etc.
+              _id:
+                type: String
+                description: Id del usuario
+              documents:
+                type: Array
+                description: Array de strings donde se almacenaran las referencias a la documentación enviada por el usuario para ciertos fines. Por ejemplo, documentos que acrediten situacion tributaria si el vendedor necesita facturar las ventas.
+        example:
+          status: 'success'
+          message: 'Registro de usuario exitoso. Inicia sesión para continuar.'
+          user:
+            {
+              first_name: 'Juan Carlos',
+              last_name: 'Perez',
+              email: 'jcperez@gmail.com',
+              age: 24,
+              password: '$2b$10$z0UJWx/WX/8/8hzvgm0yBukztYejVNDR7OU/8I8HLHWX6bVrDl5FK',
+              role: 'user',
+              comments: [],
+              last_connection: 2023-08-15T14:46:21.999+00:00,
+              enabled: true,
+              _id: '64df91cecaf5d075245d1d68',
+              documents: [],
+            }
+      LocalLogin:
+        type: object
+        properties:
+          status:
+            type: String
+            description: Estado de la respuesta
+          message:
+            type: String
+            description: Mensaje aclaratorio de la respuesta
+          user:
+            type: object
+            properties:
+              userId:
+                type: String
+                description: Id del usuario
+              first_name:
+                type: String
+                description: Nombre del usuario
+              last_name:
+                type: String
+                description: Apellido del usuario
+              age:
+                type: Number
+                description: edad del usuario
+              email:
+                type: String
+                description: Email del usuario
+              role:
+                type: String
+                description: Rol del usuario
+              last_connection:
+                type: Date
+                description: Fecha y Hora de última conexión
+          cart:
+            type: String
+            description: Id del carrito asociado al usuario
+        example:
+          status: 'success'
+          message: 'Inicio de sesión exitoso.'
+          user:
+            {
+              userId: '65b9425793ae80037928cc3f',
+              first_name: 'Juan Carlos',
+              last_name: 'Morales',
+              age: 25,
+              email: 'jcmorales@email.com',
+              role: 'user',
+              last_connection: 2023-08-15T14:46:21.999+00:00,
+            }
+          cart: '3ae80065b942537928cc3f79'
+      CurrentUser:
+        type: object
+        properties:
+          status:
+            type: String
+            description: Estado de la respuesta
+          message:
+            type: String
+            description: Mensaje aclaratorio de la respuesta
+          data:
+            type: object
+            properties:
+              first_name:
+                type: String
+                description: Nombre del usuario
+              last_name:
+                type: String
+                description: Apellido del usuario
+              email:
+                type: String
+                description: Email del usuario
+              age:
+                type: Number
+                description: edad del usuario
+              role:
+                type: String
+                description: Rol del usuario
+              location:
+                type: String
+                description: Localidad de residencia del usuario
+              province:
+                type: String
+                description: Provincia de residencia del usuario
+              country:
+                type: String
+                description: Pais de residencia del usuario
+              documents:
+                type: Array
+                description: Si posee, documentacion asociada al usuario
+              cart:
+                type: String
+                description: Id del carrito asociado al usuario
+        example:
+          status: 'success'
+          message: 'Current user'
+          user:
+            {
+              first_name: 'Juan Carlos',
+              last_name: 'Morales',
+              email: 'jcmorales@email.com',
+              age: 25,
+              role: 'user',
+              location": "Villa Ballester",
+              province: "Buenos Aires",
+              country: "Argentina",
+              documents: [],
+              cart: '3ae80065b942537928cc3f79'
+            }
+      Logout:
+        type: object
+        properties:
+          message:
+            type: String
+            description: Mensaje aclaratorio de la respuesta
+        example:
+          message: 'Sesión Finalizada'
+  requestBodies:
+    RegisterUser:
+      type: object
+      properties:
+        first_name:
+          type: String
+          description: Nombre real del usuario
+          required: true
+        last_name:
+          type: String
+          description: Apellido del usuario
+          required: true
+        email:
+          type: String
+          description: Email del usuario
+          required: true
+        age:
+          type: Number
+          description: Edad del usuario
+          required: true
+        password:
+          type: String
+          description: Password del usuario. Debe cumplir con un formato específico.
+          required: true
+      example:
+        first_name: 'Juan Carlos'
+        last_name: 'Perez'
+        email: 'jcperez@gmail.com'
+        age: 24
+        password: 'Jc$Perez1234'
+    LocalLogin:
+      type: object
+      properties:
+        email:
+          type: String
+          description: Email del usuario
+          required: true
+        password:
+          type: String
+          description: Password del usuario
+          required: true
+      example:
+        email: 'jcperez@gmail.com'
+        password: 'Jc$Perez1234'
+
+  middlewareSchemes:
+    isActiveSession:
+      type: apiKey
+      in: header
+      name: Authorization
