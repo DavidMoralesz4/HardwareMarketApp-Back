@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
 });
 
 // Persistencia en base de datos
-const dbStorage = multer.memoryStorage()
+const dbStorage = multer.memoryStorage();
 
 export const uploader = multer({
   dbStorage,
