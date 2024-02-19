@@ -1,4 +1,4 @@
-import { updatePasswordByEmail } from "../../services/database/users.services"
+import { updatePasswordByEmail } from '../../services/database/users.services';
 import bcrypt from 'bcrypt';
 
 export const changePw = async (req, res) => {
@@ -17,11 +17,9 @@ export const changePw = async (req, res) => {
     const updatedPassword = updatePasswordByEmail(userEmail, hashedPassword);
 
     if (!updatedPassword) {
-      return res
-        .status(404)
-        .json({
-          message: 'Error updating password, check all fields and try again',
-        });
+      return res.status(404).json({
+        message: 'Error updating password, check all fields and try again',
+      });
     }
 
     res.status(200).json({ message: 'Password updated succesfully' });
