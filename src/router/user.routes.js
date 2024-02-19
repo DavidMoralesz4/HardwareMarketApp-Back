@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { currentUser, updateUser } from '../controllers/users/index.controller.js';
 import { contactUs } from "../controllers/mailer/indexMailer.controller.js";
-import { sendEmailPw } from '../controllers/users/retrievepw.js';
+import { sendEmailPw } from '../controllers/users/sendEmailRetrievepw.js';
 
 const userRouter = Router();
 

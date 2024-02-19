@@ -1,26 +1,29 @@
-import { getUserByEmail } from "../../services/database/users.services"
-import { sendEmail } from "../../services/mailer/mailer.services";
-import config from "../../config/config";
+import { updatePasswordByEmail } from "../../services/database/users.services"
+import bcrypt from 'bcrypt';
 
 export const sendEmailPw = async(req,res) => {
   try {
-    const { userEmail } = req.body;
-    const userData = await getUserByEmail(userEmail);
-
-    if(!userData) return res.status(404).json({message:'Email not found in database'});
+    const {userEmail, newPassword, confirm} = req.body;
     
-    // Construye el enlace utilizando la URL base de tu servidor local y la ruta '/update-user-pw'
-    const updatePwLink = `http://localhost/update-user-pw`;
-
-    const subject = 'Retrieve your password';
-    const message = `Retrieve your HardwareMarket in the following libk: ${updatePwLink}`;
-    const send = await sendEmail(config.mailer.email, userEmail, subject, message);
-
-    if(send) {
-     res.status(200).json({message: 'Email sent succesfully, don´t forget to check your spam folder'});
+    if(!userEmail || newPassword || confirm){
+      return res.status(400).json({message:'All fields are required'})
     }
-  } catch(err){
-    res.status(500).json({message:'Internal server error'})
-    console.error(`Error recuperando la contraseña del usuario: ${err}`)
+
+    if(newPassword !== confirm){
+      return res.status(400).json({message:'Passwords must be equal'})
+    }
+   
+    const hashedPassword = await bcrypt.hash(hashedPassword, 10);
+    const updatedPassword = updatePasswordByEmail();
+      
+    if(!updatedPassword) {
+       return res.status(404).json({message:'Error updating password, check all fields and try again'})
+    }
+      
+    res.status(200).json({message: 'Password updated succesfully'})
   }
-};
+  catch(err) {
+    res.status(500).json({message:'Internal server error'});
+    console.error(`Error updating user password ${err}`)
+  }
+}
