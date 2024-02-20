@@ -5,7 +5,7 @@ export const changePw = async (req, res) => {
   try {
     const { userEmail, newPassword, confirm } = req.body;
 
-    if (!userEmail || newPassword || confirm) {
+    if (!userEmail || !newPassword || !confirm) {
       return res.status(400).json({ message: 'All fields are required' });
     }
     //
