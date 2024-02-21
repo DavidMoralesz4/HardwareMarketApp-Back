@@ -9,6 +9,7 @@ const log = getLogger();
 export const updateCart = async (req, res) => {
   try {
     const { user } = req.session;
+    log.debug('user: ' + user);
     const cid = req.params.cid;
     const { productId, quantity } = req.body;
 
