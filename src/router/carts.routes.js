@@ -27,7 +27,7 @@ cartsRouter.delete('/:cid', checkRole('admin'), (req, res) => {
 });
 
 // Obtener el carrito del usuario actual
-cartsRouter.get('/user/:uid', isActiveSession, getMyCart);
+cartsRouter.get('/user/:uid', getMyCart);
 
 // Eliminar un producto del carrito
 cartsRouter.delete(
