@@ -102,6 +102,14 @@ export const createCartDTO = (products) => {
   return cartDTO;
 };
 
+export const toLocaleFloat = (price) => {
+  const formatedNumber = price.toLocaleString('es-ES', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return parseFloat(formatedNumber.replace(',', '.'));
+};
+
 export const formatTotalAmount = (totalAmount) => {
   let number = parseFloat(totalAmount.toString().replace(',', '.'));
 
@@ -122,4 +130,13 @@ export const formatTotalAmount = (totalAmount) => {
   // Unir las partes con coma como separador decimal
   return parts.join(',');
 };
+
+
+export const formatNumber = (number) => {
+  const formatedNumber = number.toLocaleString('es-ES');
+};
+
+
+
+
 
