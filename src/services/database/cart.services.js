@@ -18,8 +18,13 @@ const getCartById = async (cartId) =>
   await cartModel.findById(cartId).populate('products.product').exec();
 
 // Obtener el carrito del usuario por su UserId (current user)
-const getCartByUserId = async (userId) =>
-  await cartModel.findOne({ owner: userId }).populate('products.product').exec();
+const getCartByUserId = async (userId) => {
+  const response = await cartModel
+    .findOne({ owner: userId })
+    .populate('products.product')
+    .exec();
+  return response;
+};
 
 // Se utiliza para agregar productos o modificar las cantidades de los mismos (current user)
 const updateCart = async (cartId, products) =>

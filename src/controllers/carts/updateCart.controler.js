@@ -8,8 +8,7 @@ const log = getLogger();
 // Actualizar el carrito
 export const updateCart = async (req, res) => {
   try {
-    const { user } = req.session;
-    log.debug('user: ' + user);
+    const  {uid}  = req.params;
     const cid = req.params.cid;
     const { productId, quantity } = req.body;
 
@@ -29,7 +28,7 @@ export const updateCart = async (req, res) => {
     }
 
     // console.log('userId:  ', user.userId);
-    if (prodFromDb.owner.toString() === user.userId) {
+    if (prodFromDb.owner.toString() === uid) {
       log.warn(
         'El cliente está intentando agregar al carrito un producto de su propiedad'
       );

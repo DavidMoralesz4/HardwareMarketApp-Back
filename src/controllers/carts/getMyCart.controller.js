@@ -1,8 +1,8 @@
 import { getCartByUserId } from '../../services/database/cart.services.js';
 import {
   createCartDTO,
-  formatTotalAmount,
   separateProductsByStock,
+  toLocaleFloat,
 } from '../../utils/cart.utils.js';
 import getLogger from '../../utils/log.utils.js';
 
@@ -22,7 +22,7 @@ export const getMyCart = async (req, res) => {
     const productsByOwner = {};
     cart.products.forEach((cartItem) => {
       const owner = cartItem.product.owner.toString();
-      console.log('owner: ', owner);
+
       if (!productsByOwner[owner]) {
         productsByOwner[owner] = [];
       }
@@ -42,7 +42,7 @@ export const getMyCart = async (req, res) => {
         const totalAmount = products.reduce((acc, curr) => acc + curr.total, 0);
         availableProductsDTO[owner] = {
           products: products,
-          totalAmount: formatTotalAmount(totalAmount) ,
+          totalAmount: toLocaleFloat(totalAmount) ,
         };
       }
     }
@@ -57,6 +57,7 @@ export const getMyCart = async (req, res) => {
       }
     }
 
+    console.log('availableProductsDTO: ', availableProductsDTO);
     res.status(200).json({
       status: 'success',
       message: 'Carrito del usuario encontrado satisfactoriamente',

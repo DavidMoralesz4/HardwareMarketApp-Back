@@ -3,7 +3,8 @@ import {
   getCarts,
   getMyCart,
   updateCart,
-  deleteProdOfCart
+  deleteProdOfCart,
+  purchase,
 } from '../controllers/carts/indexCart.controller.js';
 import { checkRole } from '../middlewares/auth.middlewares.js';
 
@@ -18,7 +19,7 @@ cartsRouter.get('/:cid', checkRole('admin'), (req, res) => {
 });
 
 // Actualizar el carrito con nuevos productos y/o cantidad de ejemplares de un producto en un carrito
-cartsRouter.put('/:cid', updateCart); //* quito el middleware para hacerun prueba con el front
+cartsRouter.put('/:cid/user/:uid', updateCart); //* quito el middleware para hacerun prueba con el front
 
 // Eliminar un carrito
 cartsRouter.delete('/:cid', checkRole('admin'), (req, res) => {
@@ -36,8 +37,6 @@ cartsRouter.delete(
 );
 
 // Finalizar el proceso de compra del carrito
-cartsRouter.post('/:cid/purchase', checkRole('user'), (req, res) => {
-  // TODO: purchase controller
-});
+cartsRouter.post('/:cid/purchase/:oid', purchase);
 
 export default cartsRouter;
