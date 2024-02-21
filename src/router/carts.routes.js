@@ -6,7 +6,7 @@ import {
   deleteProdOfCart,
   purchase,
 } from '../controllers/carts/indexCart.controller.js';
-import { checkRole } from '../middlewares/auth.middlewares.js';
+import { checkRole, isActiveSession } from '../middlewares/auth.middlewares.js';
 
 const cartsRouter = Router();
 
@@ -27,7 +27,7 @@ cartsRouter.delete('/:cid', checkRole('admin'), (req, res) => {
 });
 
 // Obtener el carrito del usuario actual
-cartsRouter.get('/user/:uid', checkRole('user'), getMyCart);
+cartsRouter.get('/user/:uid', isActiveSession, getMyCart);
 
 // Eliminar un producto del carrito
 cartsRouter.delete(
