@@ -97,6 +97,7 @@ export const createCartDTO = (products) => {
     deliveryMethod: cartItem.product.deliveryMethod,
     quantity: cartItem.quantity,
     total: parseFloat(cartItem.product.price * cartItem.quantity),
+    thumbnails: cartItem.product.thumbnails
   }));
 
   return cartDTO;
