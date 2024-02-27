@@ -23,12 +23,13 @@ export const getMyCart = async (req, res) => {
     // Separar los productos por disponibilidad (stock) //* está llegando ok
     const { productsToProcess, productsNotProcessed } =
       await separateProductsByStock(cart.products);
-
+    // console.log('getMyCart - productsToProcess: ', productsToProcess);
+    
     // Separar los productos 'productsToProcess' por propietario
-    const productsByOwner = await separateProductsByOwner(
-      productsToProcess
-      // productsNotProcessed
-    );
+    // const productsByOwner = await separateProductsByOwner(
+    //   productsToProcess
+    //   // productsNotProcessed
+    // );
 
     // ====================================================================
     // console.log('getMyCart - productsByOwner: ', productsByOwner);
@@ -58,20 +59,20 @@ export const getMyCart = async (req, res) => {
     // ====================================================================
 
     // Calcular el monto total a abonar (por propietario de los productos)
-    availableProductsDTO.forEach((ownerObject) => {
-      for (const ownerId in ownerObject) {
-        // Si el ownerObject tiene como propiedad a ownerId
-        if (Object.hasOwnProperty.call(ownerObject, ownerId)) {
-          const products = ownerObject[ownerId];
-          console.log('getMyCart - products:', products);
-          const totalAmount = products.reduce(
-            (acc, curr) => acc + curr.totalProduct,
-            0
-          );
-          ownerObject.totalAmount = totalAmount;
-        }
-      }
-    });
+    // availableProductsDTO.forEach((ownerObject) => {
+    //   for (const ownerId in ownerObject) {
+    //     // Si el ownerObject tiene como propiedad a ownerId
+    //     if (Object.hasOwnProperty.call(ownerObject, ownerId)) {
+    //       const products = ownerObject[ownerId];
+    //       // console.log('getMyCart - products:', products);
+    //       const totalAmount = products.reduce(
+    //         (acc, curr) => acc + curr.totalProduct,
+    //         0
+    //       );
+    //       ownerObject.totalAmount = totalAmount;
+    //     }
+    //   }
+    // });
 
     /* // parte reemplazada    
     const productsByOwner = {};

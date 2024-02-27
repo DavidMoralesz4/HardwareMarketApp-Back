@@ -71,10 +71,10 @@ export const separateProductsByStock = async (products) => {
   };
 };
 
-
 export const createCartDTOAvailable = (products) => {
   // Estructura del objeto a utilizar
   const productObject = (cartItem) => ({
+    // owner: cartItem.productFromDB.owner,
     id: cartItem.productFromDB._id,
     title: cartItem.productFromDB.title,
     description: cartItem.productFromDB.description,
@@ -84,7 +84,8 @@ export const createCartDTOAvailable = (products) => {
     thumbnails: cartItem.productFromDB.thumbnails,
     price: parseFloat(cartItem.productFromDB.price),
     quantity: cartItem.quantityInCart,
-    totalProduct: cartItem.quantityInCart * parseFloat(cartItem.productFromDB.price) ,
+    totalProduct:
+      cartItem.quantityInCart * parseFloat(cartItem.productFromDB.price),
   });
 
   const cartDTOAvailable = [];
@@ -101,17 +102,24 @@ export const createCartDTOAvailable = (products) => {
 
     // Si no existe, lo crea y lo agrega al ayyar
     if (ownerIndex === -1) {
-      const ownerObject = {};
-      ownerObject[ownerId] = [productObject(cartItem)];
-      cartDTOAvailable.push(ownerObject);
+      cartDTOAvailable.push({
+        owner: ownerId,
+        products: [productObject(cartItem)],
+        totalAmount: productObject(cartItem).totalProduct,
+      });
+      // const ownerObject = {};
+      // ownerObject[ownerId] = [productObject(cartItem)];
+      // cartDTOAvailable.push(ownerObject);
     } else {
       // Si ya existe, simplemente se agrega el producto al array de productos del propietario
-      cartDTOAvailable[ownerIndex][ownerId].push(productObject(cartItem));
+      cartDTOAvailable[ownerIndex].products.push(productObject(cartItem));
+      cartDTOAvailable[ownerIndex].totalAmount += productObject(cartItem).totalProduct;
+      // cartDTOAvailable[ownerIndex][ownerId].push(productObject(cartItem));
     }
   });
 
   // ====================================================================
-  // console.log('createCartDTO - cartDTOAvailable: ', cartDTOAvailable);
+  console.log('createCartDTO - cartDTOAvailable: ', cartDTOAvailable);
   // console.log('Detalles de cada objeto:');
   // cartDTOAvailable.forEach((obj) => {
   //   for (const key in obj) {
