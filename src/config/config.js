@@ -58,5 +58,11 @@ config.firebase = {
   messagingSenderId: process.env.MESSAGING_SENDER_ID,
   appId: process.env.APP_ID,
 }
+
+config.stripe = {
+  pk: process.env.PUBLIC_KEY,
+  sk: process.env.SECRET_KEY,
+};
+
 // console.log(config);
 export default config;
