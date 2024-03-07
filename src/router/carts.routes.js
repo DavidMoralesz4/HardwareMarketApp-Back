@@ -29,14 +29,14 @@ cartsRouter.delete('/:cid', checkRole('admin'), (req, res) => {
 // Obtener el carrito del usuario actual
 cartsRouter.get('/user/:uid', getMyCart);
 
+// Finalizar el proceso de compra del carrito
+cartsRouter.post('/user/:uid/purchase', purchase);
+
 // Eliminar un producto del carrito
 cartsRouter.delete(
   '/:cid/products/:pid',
   checkRole('user', 'admin'),
   deleteProdOfCart
 );
-
-// Finalizar el proceso de compra del carrito
-cartsRouter.post('/:cid/purchase/:oid', purchase);
 
 export default cartsRouter;
