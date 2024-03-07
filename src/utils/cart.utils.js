@@ -6,24 +6,22 @@ const log = getLogger();
 export const separateProductsByOwner = async (products) => {
   const productsByOwner = [];
 
-  // Iteramos sobre los productos y los organizamos por propietario
+  // Iterar sobre los productos y los organizarlos por propietario
   products.forEach((cartItem) => {
-    // Obtenemos el propietario del producto
-    const owner = cartItem.productFromDB.owner.toString();
+    // Obtener el propietario del producto
+    const ownerId = cartItem.productFromDB.owner.toString();
 
-    // Buscamos si ya existe un objeto en el array para el propietario actual
-    const ownerObjectIndex = productsByOwner.findIndex((obj) =>
-      obj.hasOwnProperty(owner)
+    // Buscar si ya existe un objeto en el array para el propietario actual
+    const ownerObjectIndex = productsByOwner.findIndex(
+      (obj) => obj.ownerId === ownerId
     );
 
-    // Si no existe, lo creamos y lo agregamos al array
+    // Si no existe, crearlo y agregarlo al array
     if (ownerObjectIndex === -1) {
-      const ownerObject = {};
-      ownerObject[owner] = [cartItem];
-      productsByOwner.push(ownerObject);
+      productsByOwner.push({ ownerId: ownerId, products: [cartItem] });
     } else {
-      // Si ya existe, simplemente agregamos el producto al array de productos del propietario
-      productsByOwner[ownerObjectIndex][owner].push(cartItem);
+      // Si ya existe, simplemente agregar el producto al array de productos del propietario
+      productsByOwner[ownerObjectIndex].products.push(cartItem);
     }
   });
 
@@ -32,15 +30,17 @@ export const separateProductsByOwner = async (products) => {
   // console.log('Detalles de cada objeto:');
   // productsByOwner.forEach((obj) => {
   //   for (const key in obj) {
-  //     console.log(`Owner: ${key}`);
+  //     console.log(`productsByOwner es:
+  //     ${key}`);
   //     console.dir(obj[key]);
   //   }
   // });
   // ====================================================================
-
+    // console.log('productsByOwner: ', productsByOwner);
   return productsByOwner;
 };
 
+// Usado en getMyCart
 export const separateProductsByStock = async (products) => {
   const productsToProcess = [];
   const productsNotProcessed = [];
@@ -113,7 +113,8 @@ export const createCartDTOAvailable = (products) => {
     } else {
       // Si ya existe, simplemente se agrega el producto al array de productos del propietario
       cartDTOAvailable[ownerIndex].products.push(productObject(cartItem));
-      cartDTOAvailable[ownerIndex].totalAmount += productObject(cartItem).totalProduct;
+      cartDTOAvailable[ownerIndex].totalAmount +=
+        productObject(cartItem).totalProduct;
       // cartDTOAvailable[ownerIndex][ownerId].push(productObject(cartItem));
     }
   });
@@ -174,6 +175,20 @@ export const createCartDTONotAvailable = (products) => {
   // });
   // ====================================================================
   return cartDTONotAvailable;
+};
+
+export const decimalToInteger = (value) => {
+  let valor = value;
+
+  if (typeof value === 'number') {
+    valor = value.toString();
+  }
+
+  const integerString = valor.split('.');
+  const newIntegerString = integerString.join('');
+  const integerValue = parseInt(newIntegerString);
+
+  return integerValue;
 };
 
 // Funciones reemplazadas
